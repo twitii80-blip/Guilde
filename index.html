@@ -1,0 +1,553 @@
+<html lang="fr" data-theme="dark" style="color-scheme: dark;"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Guildes de Kumogakure</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Manrope:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0a0a08; --bg2:#151510; --card:#1c1c14; --card2:#242418; --text:#f2ecd9; --sub:#9a9788;
+  --gold:#d4af2f; --gold2:#a8811c; --olive:#4a4a20; --line:#2e2e22;
+  --fer:#8a8a8a; --bronze:#c07a3e; --argent:#c9c9d6; --or:#d4af2f;
+  --platine:#4fd1c5; --diamant:#6fb3f0; --maitre:#b58cf0; --legende:#ff5d6c;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+html{scroll-padding-top:env(safe-area-inset-top,0px);}
+*{box-sizing:border-box;}
+body{
+  margin:0;color:var(--text);min-height:100%;font-family:'Manrope',-apple-system,sans-serif;
+  background:
+    linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px),
+    var(--bg);
+  background-size:34px 34px, 34px 34px, auto;
+  background-attachment:fixed;position:relative;overflow-x:hidden;
+}
+h1,h2,h3{font-family:'Baloo 2',sans-serif;}
+.navbar{background:#0a0a08;border-bottom:1px solid var(--line);padding:14px 18px;display:flex;align-items:center;gap:18px;flex-wrap:wrap;position:sticky;top:0;z-index:30;}
+.navbar .brand{display:flex;align-items:center;gap:10px;font-family:'Baloo 2',sans-serif;font-weight:700;font-size:1.15em;}
+.navbar .brand .star{font-size:1.6em;filter:drop-shadow(0 0 6px rgba(212,175,47,.6));animation:judge 3.6s ease-in-out infinite;}
+.navbar .brand small{display:block;color:var(--gold);font-size:.5em;letter-spacing:1.5px;font-weight:700;font-family:'Manrope',sans-serif;}
+.navlinks{display:flex;gap:4px;flex-wrap:wrap;flex:1;justify-content:center;}
+.navlinks button{border-radius:8px;font-size:.72em;text-transform:uppercase;letter-spacing:.6px;padding:9px 13px;}
+.status-bar{background:linear-gradient(90deg,rgba(74,74,32,.35),rgba(10,10,8,0));border-bottom:1px solid var(--line);
+  padding:10px 20px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;font-size:.75em;}
+.status-bar .dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:#3ddc6b;box-shadow:0 0 8px #3ddc6b;margin-right:6px;}
+.status-bar b{color:var(--gold);}
+.status-bar .tag{color:var(--sub);letter-spacing:1px;text-transform:uppercase;font-size:.9em;}
+.crumbs{padding:14px 20px 0;max-width:800px;margin:0 auto;font-size:.75em;color:var(--sub);letter-spacing:.5px;}
+.crumbs b{color:var(--gold);}
+header{padding:26px 16px 10px;max-width:800px;margin:0 auto;position:relative;}
+.hero{background:radial-gradient(120% 140% at 0% 0%, var(--olive), var(--bg) 70%);
+  border:1px solid var(--line);border-radius:22px;padding:34px 30px;margin-top:10px;}
+.hero .pill{display:inline-block;border:1px solid var(--gold);color:var(--gold);font-size:.68em;font-weight:700;
+  padding:5px 14px;border-radius:999px;letter-spacing:1px;text-transform:uppercase;margin-bottom:14px;}
+header h1{margin:0;font-size:2.6em;font-weight:800;letter-spacing:.5px;color:var(--text);line-height:1;}
+header p{margin:12px 0 0;color:var(--sub);font-size:.98em;max-width:520px;}
+.section-title{max-width:800px;margin:34px auto 16px;padding:0 16px;text-align:center;}
+.section-title h2{margin:0;font-size:1.5em;font-weight:700;color:var(--text);}
+.wrap{max-width:800px;margin:0 auto;padding:0 16px 40px;position:relative;z-index:1;}
+.toolbar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:22px;justify-content:center;}
+button{cursor:pointer;border:1px solid var(--line);background:var(--card);color:var(--text);
+  padding:10px 16px;border-radius:10px;font-size:.85em;font-weight:700;font-family:'Manrope',sans-serif;
+  transition:transform .15s ease, box-shadow .15s ease, border-color .15s ease;}
+button:hover{border-color:var(--gold);box-shadow:0 0 0 1px rgba(212,175,47,.35);}
+button.primary{background:linear-gradient(135deg,var(--gold),var(--gold2));color:#1c1300;border:none;box-shadow:0 4px 16px rgba(212,175,47,.3);border-radius:999px;}
+button.primary:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(212,175,47,.4);}
+button.danger{border-color:#a33;color:#ff9494;}
+button.ghost{background:var(--card);}
+button:active{transform:scale(.96);}
+.quick-btn{width:100%;text-align:left;background:var(--card2);border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;}
+.quick-btn:hover{border-color:var(--gold);}
+.quick-btn b{font-family:'Baloo 2',sans-serif;font-size:1em;}
+.guild{
+  background:radial-gradient(140% 160% at 0% 0%, var(--olive), var(--card) 65%);
+  border:1px solid var(--line);border-radius:16px;padding:18px 20px;margin-bottom:14px;
+  position:relative;overflow:hidden;transition:transform .18s ease, box-shadow .18s ease;
+}
+.guild::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--tier-color,var(--gold));
+  box-shadow:0 0 12px var(--tier-color,var(--gold));}
+.guild:hover{transform:translateY(-2px);box-shadow:0 10px 30px rgba(0,0,0,.5);}
+.guild-top{display:flex;align-items:center;gap:12px;cursor:pointer;}
+.medal{font-size:1.4em;width:30px;text-align:center;filter:drop-shadow(0 0 5px rgba(212,175,47,.6));}
+.gname{font-family:'Baloo 2',sans-serif;font-weight:700;font-size:1.2em;flex:1;letter-spacing:.2px;}
+.badge{font-size:.66em;padding:5px 13px;border-radius:999px;font-weight:800;white-space:nowrap;color:#100c04;
+  box-shadow:0 0 12px var(--tier-color,transparent);background:var(--tier-color,var(--gold));text-transform:uppercase;letter-spacing:.5px;}
+.pts{color:var(--sub);font-size:.88em;min-width:74px;text-align:right;font-weight:700;}
+.members-count{color:var(--sub);font-size:.8em;margin-left:42px;margin-top:4px;}
+.detail{margin-top:14px;padding-top:14px;border-top:1px solid var(--line);display:none;}
+.detail.open{display:block;}
+.member-row{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px dashed var(--line);font-size:.9em;}
+.member-row:last-child{border-bottom:none;}
+.role{color:var(--sub);font-size:.78em;}
+.log{margin-top:12px;font-size:.82em;color:var(--sub);max-height:130px;overflow-y:auto;background:rgba(0,0,0,.3);border-radius:8px;padding:8px 10px;border:1px solid var(--line);}
+.log div{padding:3px 0;border-bottom:1px dashed var(--line);}
+.log div:last-child{border-bottom:none;}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;}
+.empty{text-align:center;color:var(--sub);padding:50px 0;font-weight:600;}
+footer{text-align:center;color:var(--sub);font-size:.75em;padding:20px;opacity:.85;letter-spacing:.5px;}
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);backdrop-filter:blur(3px);display:none;align-items:center;justify-content:center;z-index:50;padding:16px;}
+.overlay.open{display:flex;}
+.modal{background:var(--card2);border:1px solid var(--gold2);border-radius:16px;padding:22px;width:100%;max-width:400px;
+  max-height:85vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.6);}
+.modal h3{margin:0 0 6px;font-size:1.25em;color:var(--gold);font-family:'Baloo 2',sans-serif;}
+.modal p{margin:0 0 14px;color:var(--sub);font-size:.88em;}
+.modal label{display:block;font-size:.78em;color:var(--sub);margin:12px 0 5px;text-transform:uppercase;letter-spacing:.5px;}
+.modal input,.modal select{width:100%;padding:10px 11px;border-radius:8px;border:1px solid var(--line);background:var(--bg2);color:var(--text);font-size:.95em;}
+.modal input:focus,.modal select:focus{outline:none;border-color:var(--gold);}
+.modal-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:20px;}
+.divider{display:flex;align-items:center;gap:10px;margin:16px 0 4px;color:var(--sub);font-size:.75em;text-transform:uppercase;letter-spacing:1px;}
+.divider::before,.divider::after{content:"";flex:1;height:1px;background:var(--line);}
+</style>
+</head>
+<body>
+<div class="navbar">
+  <div class="brand"><span class="star">⭐</span><span>KUMOGAKURE<small>GUILDES &amp; COMPÉTITION</small></span></div>
+  <div class="navlinks">
+    <button class="ghost" onclick="showRanks()">🏆 Rangs</button>
+    <button class="ghost" onclick="showMemberRanking()">🏅 Membres</button>
+    <button class="ghost" onclick="showBareme()">📊 Barème</button>
+    <button class="ghost" id="btnHistory" onclick="showPurchaseHistory()">🧾 Historique</button>
+  </div>
+  <div class="navlinks" style="flex:0;">
+    <button class="ghost" id="btnMJ" onclick="toggleRole('mj')">🔒 MJ</button>
+    <button class="ghost" id="btnChef" onclick="toggleRole('chef')">🔑 Chef</button>
+  </div>
+</div>
+<div class="status-bar">
+  <div><span class="dot"></span><b>KUMOGAKURE CONNECTÉ</b> — système en ligne</div>
+  <div class="tag">Naruto RP Nouvelle Génération</div>
+</div>
+<div class="crumbs"><b>KUMOGAKURE</b> — Portail des guildes</div>
+<header>
+  <div class="hero">
+    <span class="pill">Système officiel Kumogakure</span>
+    <h1>Guildes</h1>
+    <p>Rejoins une guilde, cumule des points pour ton clan et grimpe dans le classement — jusqu'à ce que les cieux rendent leur jugement.</p>
+  </div>
+</header>
+<div class="section-title"><h2>Classement des guildes</h2></div>
+<div class="wrap">
+  <div class="toolbar">
+    <button class="primary" id="btnNewGuild" onclick="createGuild()">+ Nouvelle guilde</button>
+  </div>
+  <div id="list"><div class="guild" style="--tier-color:var(--diamant)">
+      <div class="guild-top" onclick="toggle('g1790435504225')">
+        <span class="medal">🥇</span>
+        <span class="gname">Yuzik</span>
+        <span class="badge" style="--tier-color:var(--diamant)">Diamant</span>
+        <span class="pts">1300 pts</span>
+        <span class="pts" style="color:var(--gold);min-width:auto;">🪙 0</span>
+      </div>
+      <div class="members-count">2/10 membres</div>
+      <div class="detail open">
+        <div class="member-row"><span>Fire <span class="role">— Membre · 10 pts</span></span><button onclick="removeMember('g1790435504225',0)">✕</button></div><div class="member-row"><span>Yuzik <span class="role">— Chef de guilde · 2000 pts</span></span><button onclick="removeMember('g1790435504225',1)">✕</button></div>
+        <div class="log"><div>-500 pts — 🛒 Un Pardon (en cas de bêtise)</div><div>-100 pts — 🛒 Réduction à la forge ou corbeau</div><div>+10 pts — Aura <b>(Fire)</b></div><div>-100 pts — 🛒 Réduction à la forge ou corbeau</div><div>-30 pts — Mission loupée <b>(Fire)</b></div><div>+2000 pts — Mission <b>(Yuzik)</b></div><div>+10 pts — Promotion d'un membre</div><div>+10 pts — Mission donnée pour la guilde</div></div>
+        <div class="actions">
+          <button class="primary" onclick="openAddPoints('g1790435504225')">⚡ Ajouter des points</button>
+          <button onclick="openAddGold('g1790435504225')">🪙 Or</button>
+          <button onclick="addMember('g1790435504225')">+ Membre</button>
+          <button onclick="openShop('g1790435504225')">🛒 Boutique</button>
+          <button class="danger" onclick="deleteGuild('g1790435504225')">Supprimer la guilde</button>
+        </div>
+      </div>
+    </div><div class="guild" style="--tier-color:var(--or)">
+      <div class="guild-top" onclick="toggle('g1790420951874')">
+        <span class="medal">🥈</span>
+        <span class="gname">Aura</span>
+        <span class="badge" style="--tier-color:var(--or)">Or</span>
+        <span class="pts">790 pts</span>
+        <span class="pts" style="color:var(--gold);min-width:auto;">🪙 1</span>
+      </div>
+      <div class="members-count">2/10 membres</div>
+      <div class="detail ">
+        <div class="member-row"><span>Aura <span class="role">— Membre · 20 pts</span></span><button onclick="removeMember('g1790420951874',0)">✕</button></div><div class="member-row"><span>Darnyl <span class="role">— Membre · 10 pts</span></span><button onclick="removeMember('g1790420951874',1)">✕</button></div>
+        <div class="log"><div>+10 pts — Promotion d'un membre <b>(Darnyl)</b></div><div>-500 pts — 🛒 Un Pardon (en cas de bêtise)</div><div>+20 pts — Combat entre guildes gagné <b>(Aura)</b></div><div>🪙 +1 or — Récompense</div><div>-500 pts — 🛒 Un Pardon (en cas de bêtise)</div><div>-200 pts — 🛒 Réduction à la forge ou corbeau</div><div>-10 pts — Combat entre guildes perdu</div><div>+10 pts — Promotion d'un membre</div><div>-20 pts — Rétrogradation</div><div>+10 pts — Promotion d'un membre</div><div>-50 pts — Mauvaise action</div><div>+2000 pts — Mission</div><div>+20 pts — Mission avec de l'aura</div></div>
+        <div class="actions">
+          <button class="primary" onclick="openAddPoints('g1790420951874')">⚡ Ajouter des points</button>
+          <button onclick="openAddGold('g1790420951874')">🪙 Or</button>
+          <button onclick="addMember('g1790420951874')">+ Membre</button>
+          <button onclick="openShop('g1790420951874')">🛒 Boutique</button>
+          <button class="danger" onclick="deleteGuild('g1790420951874')">Supprimer la guilde</button>
+        </div>
+      </div>
+    </div><div class="guild" style="--tier-color:var(--fer)">
+      <div class="guild-top" onclick="toggle('g1790422433897')">
+        <span class="medal">🥉</span>
+        <span class="gname">gfhssgsd</span>
+        <span class="badge" style="--tier-color:var(--fer)">Fer</span>
+        <span class="pts">10 pts</span>
+        <span class="pts" style="color:var(--gold);min-width:auto;">🪙 0</span>
+      </div>
+      <div class="members-count">1/10 membres</div>
+      <div class="detail ">
+        <div class="member-row"><span>dsqdsqdqs <span class="role">— Chef de guilde · 0 pts</span></span><button onclick="removeMember('g1790422433897',0)">✕</button></div>
+        <div class="log"><div>+10 pts — Bonne action réalisée par la guilde</div></div>
+        <div class="actions">
+          <button class="primary" onclick="openAddPoints('g1790422433897')">⚡ Ajouter des points</button>
+          <button onclick="openAddGold('g1790422433897')">🪙 Or</button>
+          <button onclick="addMember('g1790422433897')">+ Membre</button>
+          <button onclick="openShop('g1790422433897')">🛒 Boutique</button>
+          <button class="danger" onclick="deleteGuild('g1790422433897')">Supprimer la guilde</button>
+        </div>
+      </div>
+    </div></div>
+</div>
+<footer>Clan &amp; Guildes — Kumogakure · classement mis à jour en direct</footer>
+
+<div class="overlay" id="overlay">
+  <div class="modal" id="modalBox"></div>
+</div>
+
+<script id="app-data" type="application/json">{"guilds":[{"id":"g1790420951874","name":"Aura","points":790,"members":[{"name":"Aura","role":"Membre","points":20},{"name":"Darnyl","role":"Membre","points":10}],"log":[{"pts":20,"reason":"Mission avec de l'aura"},{"pts":2000,"reason":"Mission"},{"pts":-50,"reason":"Mauvaise action"},{"pts":10,"reason":"Promotion d'un membre"},{"pts":-20,"reason":"Rétrogradation"},{"pts":10,"reason":"Promotion d'un membre"},{"pts":-10,"reason":"Combat entre guildes perdu"},{"pts":-200,"reason":"🛒 Réduction à la forge ou corbeau"},{"pts":-500,"reason":"🛒 Un Pardon (en cas de bêtise)"},{"gold":1,"reason":"Récompense"},{"pts":20,"reason":"Combat entre guildes gagné","member":"Aura"},{"pts":-500,"reason":"🛒 Un Pardon (en cas de bêtise)"},{"pts":10,"reason":"Promotion d'un membre","member":"Darnyl"}],"gold":1},{"id":"g1790422433897","name":"gfhssgsd","points":10,"members":[{"name":"dsqdsqdqs","role":"Chef de guilde"}],"log":[{"pts":10,"reason":"Bonne action réalisée par la guilde"}]},{"id":"g1790435504225","name":"Yuzik","points":1300,"members":[{"name":"Fire","role":"Membre","points":10},{"name":"Yuzik","role":"Chef de guilde","points":2000}],"log":[{"pts":10,"reason":"Mission donnée pour la guilde"},{"pts":10,"reason":"Promotion d'un membre"},{"pts":2000,"reason":"Mission","member":"Yuzik"},{"pts":-30,"reason":"Mission loupée","member":"Fire"},{"pts":-100,"reason":"🛒 Réduction à la forge ou corbeau"},{"pts":10,"reason":"Aura","member":"Fire"},{"pts":-100,"reason":"🛒 Réduction à la forge ou corbeau"},{"pts":-500,"reason":"🛒 Un Pardon (en cas de bêtise)"}]}],"purchases":[{"guild":"Aura","item":"Réduction à la forge ou corbeau","cost":200,"date":"26/09/2026"},{"guild":"Aura","item":"Un Pardon (en cas de bêtise)","cost":500,"date":"26/09/2026"},{"guild":"Aura","item":"Un Pardon (en cas de bêtise)","cost":500,"date":"26/09/2026"},{"guild":"Yuzik","item":"Réduction à la forge ou corbeau","cost":100,"date":"27/09/2026"},{"guild":"Yuzik","item":"Réduction à la forge ou corbeau","cost":100,"date":"27/09/2026"},{"guild":"Yuzik","item":"Un Pardon (en cas de bêtise)","cost":500,"date":"27/09/2026"}]}</script>
+
+<script>
+const TIERS = [
+  {name:"Légende", min:2250, color:"var(--legende)"},
+  {name:"Maître",  min:1700, color:"var(--maitre)"},
+  {name:"Diamant", min:1250, color:"var(--diamant)"},
+  {name:"Platine", min:900,  color:"var(--platine)"},
+  {name:"Or",      min:600,  color:"var(--or)"},
+  {name:"Argent",  min:350,  color:"var(--argent)"},
+  {name:"Bronze",  min:150,  color:"var(--bronze)"},
+  {name:"Fer",     min:0,    color:"var(--fer)"},
+];
+function tierFor(pts){ return TIERS.find(t=>pts>=t.min); }
+
+const POINT_RULES = [
+  {label:"Mission donnée pour la guilde", pts:10},
+  {label:"Bonne action réalisée par la guilde", pts:10},
+  {label:"Combat entre guildes gagné", pts:20},
+  {label:"Combat entre guildes perdu", pts:-10},
+  {label:"Prime réalisée par la guilde", pts:null, perRank:5},
+  {label:"Mission loupée", pts:-30},
+  {label:"Mauvaise action", pts:-50},
+  {label:"Promotion d'un membre", pts:10},
+  {label:"Rétrogradation", pts:-20}
+];
+
+const SHOP_ITEMS = [
+  {label:"Réduction à la forge ou corbeau", cost:100},
+  {label:"Être pris forcément au prochain capture", cost:50},
+  {label:"Passage Genin Confirmé", cost:250},
+  {label:"Un Pardon (en cas de bêtise)", cost:500},
+  {label:"Mettre un malus à une équipe adverse", cost:150},
+  {label:"Entraînement perso avec n'importe quel HG", cost:250}
+];
+
+let DATA = JSON.parse(document.getElementById('app-data').textContent);
+let openId = null;
+const ROLES = {
+  mj:   { password:"TwitiiBroLuxe", key:"kumo_mj",   label:"Mode MJ" },
+  chef: { password:"Malédiction",   key:"kumo_chef", label:"Mode Chef de Guilde" }
+};
+let roles = {
+  mj:   localStorage.getItem(ROLES.mj.key) === '1',
+  chef: localStorage.getItem(ROLES.chef.key) === '1'
+};
+function canManage(){ return roles.mj; }
+function canAddMembers(){ return roles.mj || roles.chef; }
+
+let claudeArtifact = null;
+try{
+  if(window.claude && window.claude.use){
+    window.claude.use("artifact").then(a=>claudeArtifact=a).catch(()=>{});
+  }
+}catch(e){}
+
+function updateRoleButtons(){
+  document.getElementById('btnMJ').textContent = roles.mj ? '🔓 Quitter le mode MJ' : '🔒 Mode MJ';
+  document.getElementById('btnChef').textContent = roles.chef ? '🔓 Quitter le mode Chef' : '🔑 Mode Chef de Guilde';
+  document.getElementById('btnNewGuild').style.display = canManage() ? '' : 'none';
+  document.getElementById('btnHistory').style.display = canManage() ? '' : 'none';
+}
+function toggleRole(roleName){
+  const r = ROLES[roleName];
+  if(roles[roleName]){
+    roles[roleName] = false;
+    localStorage.removeItem(r.key);
+    updateRoleButtons();
+    render();
+    return;
+  }
+  openForm(r.label, [{id:'pwd', label:'Mot de passe', type:'password'}], (v)=>{
+    if(v.pwd === r.password){
+      roles[roleName] = true;
+      localStorage.setItem(r.key,'1');
+      updateRoleButtons();
+      render();
+    } else {
+      openInfo("Mot de passe incorrect", "Réessaie avec le bon mot de passe.");
+    }
+  }, "Déverrouiller");
+}
+
+function render(){
+  const list = document.getElementById('list');
+  if(!DATA.guilds.length){
+    list.innerHTML = '<div class="empty">Aucune guilde pour l\'instant.<br>Crée la première avec le bouton ci-dessus.</div>';
+    return;
+  }
+  const sorted = [...DATA.guilds].sort((a,b)=>b.points-a.points);
+  list.innerHTML = sorted.map((g,i)=>{
+    const t = tierFor(g.points);
+    const medal = i===0?'🥇':i===1?'🥈':i===2?'🥉':'';
+    const isOpen = openId===g.id;
+    return `<div class="guild" style="--tier-color:${t.color}">
+      <div class="guild-top" onclick="toggle('${g.id}')">
+        <span class="medal">${medal}</span>
+        <span class="gname">${esc(g.name)}</span>
+        <span class="badge" style="--tier-color:${t.color}">${t.name}</span>
+        <span class="pts">${g.points} pts</span>
+        <span class="pts" style="color:var(--gold);min-width:auto;">🪙 ${g.gold||0}</span>
+      </div>
+      <div class="members-count">${g.members.length}/10 membres</div>
+      <div class="detail ${isOpen?'open':''}">
+        ${g.members.map((m,idx)=>`<div class="member-row"><span>${esc(m.name)} <span class="role">— ${esc(m.role)} · ${m.points||0} pts</span></span>${canManage()?`<button onclick="removeMember('${g.id}',${idx})">✕</button>`:''}</div>`).join('') || '<div class="member-row"><span class="role">Aucun membre</span></div>'}
+        <div class="log">${(g.log||[]).slice().reverse().map(l=> l.gold!==undefined
+          ? `<div>🪙 ${l.gold>0?'+':''}${l.gold} or — ${esc(l.reason)}</div>`
+          : `<div>${l.pts>0?'+':''}${l.pts} pts — ${esc(l.reason)}${l.member?` <b>(${esc(l.member)})</b>`:''}</div>`
+        ).join('') || '<div>Aucune mission enregistrée</div>'}</div>
+        ${(canManage()||canAddMembers()) ? `<div class="actions">
+          ${canManage() ? `<button class="primary" onclick="openAddPoints('${g.id}')">⚡ Ajouter des points</button>` : ''}
+          ${canManage() ? `<button onclick="openAddGold('${g.id}')">🪙 Or</button>` : ''}
+          ${canAddMembers() ? `<button onclick="addMember('${g.id}')">+ Membre</button>` : ''}
+          ${canAddMembers() ? `<button onclick="openShop('${g.id}')">🛒 Boutique</button>` : ''}
+          ${canManage() ? `<button class="danger" onclick="deleteGuild('${g.id}')">Supprimer la guilde</button>` : ''}
+        </div>` : ''}
+      </div>
+    </div>`;
+  }).join('');
+}
+function esc(s){ if(s===undefined||s===null) return ''; return String(s).replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function toggle(id){ openId = openId===id ? null : id; render(); }
+
+function persist(){
+  render();
+  document.getElementById('app-data').textContent = JSON.stringify(DATA);
+  if(claudeArtifact){
+    claudeArtifact.publish(document.documentElement.outerHTML).catch(()=>{});
+  }
+}
+
+// ---------- modale maison ----------
+const overlay = document.getElementById('overlay');
+const modalBox = document.getElementById('modalBox');
+function closeModal(){ overlay.classList.remove('open'); modalBox.innerHTML=''; }
+overlay.addEventListener('click', e=>{ if(e.target===overlay) closeModal(); });
+
+function openForm(title, fields, onSubmit, submitLabel){
+  modalBox.innerHTML = `<h3>${esc(title)}</h3>` +
+    fields.map(f=>`<label>${esc(f.label)}</label>` + (f.type==='select'
+      ? `<select id="f_${f.id}">${f.options.map(o=>`<option ${o===f.value?'selected':''}>${esc(o)}</option>`).join('')}</select>`
+      : `<input id="f_${f.id}" type="${f.type||'text'}" value="${esc(f.value||'')}">`)
+    ).join('') +
+    `<div class="modal-actions"><button onclick="closeModal()">Annuler</button><button class="primary" id="modalOk">${esc(submitLabel||'Valider')}</button></div>`;
+  overlay.classList.add('open');
+  const first = modalBox.querySelector('input,select');
+  if(first) setTimeout(()=>first.focus(),50);
+  document.getElementById('modalOk').onclick = ()=>{
+    const values = {};
+    fields.forEach(f=> values[f.id] = document.getElementById('f_'+f.id).value);
+    closeModal();
+    onSubmit(values);
+  };
+}
+function openConfirm(title, text, onYes){
+  modalBox.innerHTML = `<h3>${esc(title)}</h3><p>${esc(text)}</p>
+    <div class="modal-actions"><button onclick="closeModal()">Annuler</button><button class="danger" id="modalYes">Confirmer</button></div>`;
+  overlay.classList.add('open');
+  document.getElementById('modalYes').onclick = ()=>{ closeModal(); onYes(); };
+}
+function openInfo(title, html){
+  modalBox.innerHTML = `<h3>${esc(title)}</h3><div style="font-size:.9em;">${html}</div>
+    <div class="modal-actions"><button class="primary" onclick="closeModal()">Fermer</button></div>`;
+  overlay.classList.add('open');
+}
+
+// ---------- actions ----------
+function createGuild(){
+  if(!canManage()) return;
+  openForm("Nouvelle guilde", [{id:'name', label:'Nom de la guilde'}], (v)=>{
+    if(!v.name) return;
+    DATA.guilds.push({id:'g'+Date.now(), name:v.name, points:0, members:[], log:[]});
+    persist();
+  }, "Créer");
+}
+function deleteGuild(id){
+  if(!canManage()) return;
+  openConfirm("Supprimer la guilde", "Cette action est définitive. Confirmer ?", ()=>{
+    DATA.guilds = DATA.guilds.filter(g=>g.id!==id);
+    openId=null;
+    persist();
+  });
+}
+function addMember(id){
+  if(!canAddMembers()) return;
+  const g = DATA.guilds.find(g=>g.id===id);
+  if(g.members.length>=10){ openInfo("Guilde complète","Cette guilde a déjà 10 membres (maximum)."); return; }
+  openForm("Ajouter un membre", [
+    {id:'name', label:'Nom du joueur'},
+    {id:'role', label:'Rôle', type:'select', options:['Membre','Officier','Chef de guilde'], value:'Membre'}
+  ], (v)=>{
+    if(!v.name) return;
+    g.members.push({name:v.name, role:v.role, points:0});
+    persist();
+  }, "Ajouter");
+}
+function removeMember(id, idx){
+  if(!canManage()) return;
+  const g = DATA.guilds.find(g=>g.id===id);
+  openConfirm("Retirer le membre", `Retirer ${g.members[idx].name} de la guilde ?`, ()=>{
+    g.members.splice(idx,1);
+    persist();
+  });
+}
+function applyPoints(id, pts, reason, memberName){
+  const g = DATA.guilds.find(g=>g.id===id);
+  g.points = Math.max(0, g.points + pts);
+  g.log = g.log || [];
+  g.log.push({pts, reason, member: memberName || null});
+  if(memberName){
+    const m = g.members.find(m=>m.name===memberName);
+    if(m) m.points = Math.max(0, (m.points||0) + pts);
+  }
+  persist();
+}
+function openAddPoints(id){
+  if(!canManage()) return;
+  const g = DATA.guilds.find(g=>g.id===id);
+  const memberOptions = `<option value="">— Toute la guilde (aucun membre en particulier) —</option>` +
+    g.members.map(m=>`<option value="${esc(m.name)}">${esc(m.name)} (${esc(m.role)})</option>`).join('');
+  modalBox.innerHTML = `<h3>⚡ Ajouter des points</h3><p>${esc(g.name)} — choisis une action du barème ou saisis un montant libre.</p>
+    <label>Attribuer à</label><select id="pointMember">${memberOptions}</select>
+    <div class="divider">barème</div>
+    <div id="quickList"></div>
+    <div class="divider">ou montant personnalisé</div>
+    <label>Points (négatif = pénalité)</label><input id="customPts" type="number" value="10">
+    <label>Raison</label><input id="customReason" type="text" value="Mission">
+    <div class="modal-actions"><button onclick="closeModal()">Annuler</button><button class="primary" id="customOk">Valider le montant libre</button></div>`;
+  const ql = document.getElementById('quickList');
+  ql.innerHTML = POINT_RULES.map((r,idx)=>{
+    const label = r.perRank ? `${r.label} (+${r.perRank}/rang)` : `${r.label} (${r.pts>0?'+':''}${r.pts})`;
+    const color = r.perRank ? 'var(--gold)' : (r.pts>0 ? '#6fd67a' : '#ff8484');
+    return `<button type="button" class="quick-btn" data-idx="${idx}"><span>${esc(r.label)}</span><b style="color:${color}">${r.perRank? '+'+r.perRank+'/rang' : (r.pts>0?'+':'')+r.pts}</b></button>`;
+  }).join('');
+  ql.querySelectorAll('.quick-btn').forEach(btn=>{
+    btn.onclick = ()=>{
+      const r = POINT_RULES[+btn.dataset.idx];
+      const member = document.getElementById('pointMember').value;
+      if(r.perRank){
+        closeModal();
+        openForm("Prime — rang concerné", [{id:'rang', label:'Rang de la prime (nombre)', type:'number', value:1}], (v)=>{
+          const rang = parseInt(v.rang,10) || 1;
+          applyPoints(id, r.perRank*rang, `${r.label} (rang ${rang})`, member);
+        }, "Valider");
+      } else {
+        closeModal();
+        applyPoints(id, r.pts, r.label, member);
+      }
+    };
+  });
+  document.getElementById('customOk').onclick = ()=>{
+    const pts = parseInt(document.getElementById('customPts').value,10);
+    const reason = document.getElementById('customReason').value || 'Mission';
+    const member = document.getElementById('pointMember').value;
+    if(isNaN(pts)) return;
+    closeModal();
+    applyPoints(id, pts, reason, member);
+  };
+  overlay.classList.add('open');
+}
+function openAddGold(id){
+  if(!canManage()) return;
+  const g = DATA.guilds.find(g=>g.id===id);
+  openForm("🪙 Ajouter / retirer de l'or", [
+    {id:'amount', label:"Quantité d'or (négatif pour retirer)", type:'number', value:50},
+    {id:'reason', label:'Raison (optionnel)', value:'Récompense'}
+  ], (v)=>{
+    const amt = parseInt(v.amount,10);
+    if(isNaN(amt)) return;
+    g.gold = Math.max(0,(g.gold||0)+amt);
+    g.log = g.log || [];
+    g.log.push({gold:amt, reason: v.reason || 'Or'});
+    persist();
+  }, "Valider");
+}
+function openShop(id){
+  if(!canAddMembers()) return;
+  const g = DATA.guilds.find(g=>g.id===id);
+  modalBox.innerHTML = `<h3>🛒 Boutique</h3><p>${esc(g.name)} — solde actuel : <b style="color:var(--gold)">${g.points} pts</b></p>
+    <div id="shopList"></div>
+    <div class="modal-actions"><button onclick="closeModal()">Fermer</button></div>`;
+  const sl = document.getElementById('shopList');
+  sl.innerHTML = SHOP_ITEMS.map((it,idx)=>{
+    const afford = g.points >= it.cost;
+    return `<button type="button" class="quick-btn" data-idx="${idx}" style="${afford?'':'opacity:.45;'}"><span>${esc(it.label)}</span><b style="color:var(--gold)">${it.cost} pts</b></button>`;
+  }).join('');
+  sl.querySelectorAll('.quick-btn').forEach(btn=>{
+    btn.onclick = ()=>{
+      const it = SHOP_ITEMS[+btn.dataset.idx];
+      if(g.points < it.cost){ openInfo("Points insuffisants", `Il manque ${it.cost - g.points} points pour acheter "${it.label}".`); return; }
+      openConfirm("Confirmer l'achat", `Acheter "${it.label}" pour ${it.cost} points ?`, ()=>{
+        g.points -= it.cost;
+        g.log = g.log || [];
+        g.log.push({pts:-it.cost, reason:`🛒 ${it.label}`});
+        DATA.purchases = DATA.purchases || [];
+        DATA.purchases.push({guild:g.name, item:it.label, cost:it.cost, date:new Date().toLocaleDateString('fr-FR')});
+        persist();
+      });
+    };
+  });
+  overlay.classList.add('open');
+}
+function showPurchaseHistory(){
+  if(!canManage()) return;
+  const purchases = DATA.purchases || [];
+  openInfo("🧾 Historique des achats", purchases.length ? purchases.slice().reverse().map(p=>
+    `<div style="padding:6px 0;border-bottom:1px dashed var(--line);">
+       <b>${esc(p.guild)}</b> — ${esc(p.item)} <span style="color:var(--gold);">(${p.cost} pts)</span>
+       <div style="color:var(--sub);font-size:.8em;">${esc(p.date)}</div>
+     </div>`).join('') : '<p>Aucun achat pour le moment.</p>');
+}
+function showMemberRanking(){
+  const all = [];
+  DATA.guilds.forEach(g=> g.members.forEach(m=> all.push({name:m.name, role:m.role, guild:g.name, points:m.points||0})));
+  all.sort((a,b)=>b.points-a.points);
+  const roleColor = r => r==='Chef de guilde' ? 'var(--gold)' : r==='Officier' ? 'var(--diamant)' : 'var(--sub)';
+  openInfo("🏅 Classement des membres", all.length ? all.map((m,i)=>{
+    const medal = i===0?'🥇':i===1?'🥈':i===2?'🥉':`${i+1}.`;
+    return `<div style="display:flex;justify-content:space-between;align-items:center;gap:8px;padding:7px 0;border-bottom:1px dashed var(--line);">
+       <span style="min-width:24px;">${medal}</span>
+       <span style="flex:1;">
+         <b>${esc(m.name)}</b>
+         <span style="display:block;color:${roleColor(m.role)};font-size:.78em;">${esc(m.role)} · ${esc(m.guild)}</span>
+       </span>
+       <b style="color:var(--gold);white-space:nowrap;">${m.points} pts</b>
+     </div>`;
+  }).join('') : '<p>Aucun membre pour le moment.</p>');
+}
+function showRanks(){
+  openInfo("🏆 Rangs des guildes", TIERS.slice().reverse().map(t=>
+    `<div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px dashed var(--line);">
+       <span style="color:${t.color};font-weight:700;">${t.name}</span><span>dès ${t.min} pts</span>
+     </div>`).join(''));
+}
+function showBareme(){
+  openInfo("📊 Barème des points", POINT_RULES.map(r=>{
+    const label = r.perRank ? `${r.label}` : r.label;
+    const val = r.perRank ? `+${r.perRank} / rang` : `${r.pts>0?'+':''}${r.pts}`;
+    const color = r.perRank ? 'var(--gold)' : (r.pts>0 ? '#6fd67a' : '#ff8484');
+    return `<div style="display:flex;justify-content:space-between;gap:10px;padding:6px 0;border-bottom:1px dashed var(--line);">
+       <span>${esc(label)}</span><span style="color:${color};font-weight:700;white-space:nowrap;">${val}</span>
+     </div>`;
+  }).join(''));
+}
+
+updateRoleButtons();
+render();
+</script>
+
+
+</body><!-- v2 --></html>
