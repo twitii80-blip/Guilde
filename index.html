@@ -1,232 +1,447 @@
 <html lang="fr" data-theme="dark" style="color-scheme: dark;"><head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Guildes de Kumogakure</title>
+<title>⚡ Kumogakure — Guildes</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&amp;family=Manrope:wght@400;500;700;800&amp;display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 :root{
-  --bg:#0a0a08; --bg2:#151510; --card:#1c1c14; --card2:#242418; --text:#f2ecd9; --sub:#9a9788;
-  --gold:#d4af2f; --gold2:#a8811c; --olive:#4a4a20; --line:#2e2e22;
-  --fer:#8a8a8a; --bronze:#c07a3e; --argent:#c9c9d6; --or:#d4af2f;
-  --platine:#4fd1c5; --diamant:#6fb3f0; --maitre:#b58cf0; --legende:#ff5d6c;
+  --ink:#171b22;
+  --ink2:#27313d;
+  --night:#101722;
+  --night2:#182332;
+  --cloud:#dfe7ed;
+  --paper:#e9d6a5;
+  --paper2:#f4e6bf;
+  --paper3:#c9ad72;
+  --paper-dark:#8d7040;
+  --gold:#f3c94b;
+  --gold2:#ffe28a;
+  --bolt:#fff4a8;
+  --blue:#527da8;
+  --blue2:#314e70;
+  --red:#9d4545;
+  --green:#5f8a69;
+  --line:rgba(38,28,16,.24);
+  --shadow:0 18px 45px rgba(0,0,0,.34);
   box-sizing:border-box;
-  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
 }
-html{scroll-padding-top:env(safe-area-inset-top,0px);}
-*{box-sizing:border-box;}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:88px}
 body{
-  margin:0;color:var(--text);min-height:100%;font-family:'Manrope',-apple-system,sans-serif;
+  margin:0;min-height:100vh;color:var(--cloud);
+  font-family:'Manrope',Arial,sans-serif;
   background:
-    linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px),
-    var(--bg);
-  background-size:34px 34px, 34px 34px, auto;
-  background-attachment:fixed;position:relative;overflow-x:hidden;
+    radial-gradient(circle at 50% -10%,rgba(92,130,164,.28),transparent 32%),
+    linear-gradient(180deg,#101925 0%,#0d141d 45%,#111923 100%);
+  overflow-x:hidden;
 }
-h1,h2,h3{font-family:'Baloo 2',sans-serif;}
-.navbar{background:#0a0a08;border-bottom:1px solid var(--line);padding:14px 18px;display:flex;align-items:center;gap:18px;flex-wrap:wrap;position:sticky;top:0;z-index:30;}
-.navbar .brand{display:flex;align-items:center;gap:10px;font-family:'Baloo 2',sans-serif;font-weight:700;font-size:1.15em;}
-.navbar .brand .star{font-size:1.6em;filter:drop-shadow(0 0 6px rgba(212,175,47,.6));animation:judge 3.6s ease-in-out infinite;}
-.navbar .brand small{display:block;color:var(--gold);font-size:.5em;letter-spacing:1.5px;font-weight:700;font-family:'Manrope',sans-serif;}
-.navlinks{display:flex;gap:4px;flex-wrap:wrap;flex:1;justify-content:center;}
-.navlinks button{border-radius:8px;font-size:.72em;text-transform:uppercase;letter-spacing:.6px;padding:9px 13px;}
-.status-bar{background:linear-gradient(90deg,rgba(74,74,32,.35),rgba(10,10,8,0));border-bottom:1px solid var(--line);
-  padding:10px 20px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;font-size:.75em;}
-.status-bar .dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:#3ddc6b;box-shadow:0 0 8px #3ddc6b;margin-right:6px;}
-.status-bar b{color:var(--gold);}
-.status-bar .tag{color:var(--sub);letter-spacing:1px;text-transform:uppercase;font-size:.9em;}
-.crumbs{padding:14px 20px 0;max-width:800px;margin:0 auto;font-size:.75em;color:var(--sub);letter-spacing:.5px;}
-.crumbs b{color:var(--gold);}
-header{padding:26px 16px 10px;max-width:800px;margin:0 auto;position:relative;}
-.hero{background:radial-gradient(120% 140% at 0% 0%, var(--olive), var(--bg) 70%);
-  border:1px solid var(--line);border-radius:22px;padding:34px 30px;margin-top:10px;}
-.hero .pill{display:inline-block;border:1px solid var(--gold);color:var(--gold);font-size:.68em;font-weight:700;
-  padding:5px 14px;border-radius:999px;letter-spacing:1px;text-transform:uppercase;margin-bottom:14px;}
-header h1{margin:0;font-size:2.6em;font-weight:800;letter-spacing:.5px;color:var(--text);line-height:1;}
-header p{margin:12px 0 0;color:var(--sub);font-size:.98em;max-width:520px;}
-.section-title{max-width:800px;margin:34px auto 16px;padding:0 16px;text-align:center;}
-.section-title h2{margin:0;font-size:1.5em;font-weight:700;color:var(--text);}
-.wrap{max-width:800px;margin:0 auto;padding:0 16px 40px;position:relative;z-index:1;}
-.toolbar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:22px;justify-content:center;}
-button{cursor:pointer;border:1px solid var(--line);background:var(--card);color:var(--text);
-  padding:10px 16px;border-radius:10px;font-size:.85em;font-weight:700;font-family:'Manrope',sans-serif;
-  transition:transform .15s ease, box-shadow .15s ease, border-color .15s ease;}
-button:hover{border-color:var(--gold);box-shadow:0 0 0 1px rgba(212,175,47,.35);}
-button.primary{background:linear-gradient(135deg,var(--gold),var(--gold2));color:#1c1300;border:none;box-shadow:0 4px 16px rgba(212,175,47,.3);border-radius:999px;}
-button.primary:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(212,175,47,.4);}
-button.danger{border-color:#a33;color:#ff9494;}
-button.ghost{background:var(--card);}
-button:active{transform:scale(.96);}
-.quick-btn{width:100%;text-align:left;background:var(--card2);border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;}
-.quick-btn:hover{border-color:var(--gold);}
-.quick-btn b{font-family:'Baloo 2',sans-serif;font-size:1em;}
+body:before{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:-1;
+  opacity:.20;
+  background:
+    radial-gradient(circle at 15% 30%,rgba(255,255,255,.07) 0 1px,transparent 2px),
+    radial-gradient(circle at 70% 75%,rgba(255,255,255,.05) 0 1px,transparent 2px);
+  background-size:90px 90px,130px 130px;
+}
+body:after{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:25;
+  background:linear-gradient(90deg,rgba(0,0,0,.16),transparent 12%,transparent 88%,rgba(0,0,0,.2));
+}
+h1,h2,h3,.gname{font-family:'Baloo 2',sans-serif}
+button,input,select{font-family:inherit}
+
+/* ===== NAVIGATION : bois sombre + parchemin ===== */
+.navbar{
+  position:sticky;top:0;z-index:30;
+  min-height:76px;padding:10px 24px;
+  display:flex;align-items:center;gap:18px;flex-wrap:wrap;
+  background:
+    linear-gradient(180deg,rgba(19,29,41,.98),rgba(10,17,25,.98));
+  border-bottom:3px solid #80663b;
+  box-shadow:0 5px 0 rgba(0,0,0,.22),0 14px 35px rgba(0,0,0,.25);
+}
+.navbar:after{
+  content:"";position:absolute;left:0;right:0;bottom:-6px;height:2px;
+  background:linear-gradient(90deg,transparent,var(--gold),var(--bolt),var(--gold),transparent);
+  opacity:.7;
+}
+.navbar .brand{
+  display:flex;align-items:center;gap:12px;min-width:max-content;
+  font-family:'Baloo 2';font-weight:800;font-size:1.22rem;letter-spacing:1px;
+}
+.navbar .brand .star{
+  width:45px;height:45px;display:grid;place-items:center;
+  border:2px solid #a17f3e;border-radius:7px;
+  color:#111;background:linear-gradient(145deg,#f7df8d,#bd963f);
+  box-shadow:inset 0 0 0 3px rgba(255,255,255,.15),0 5px 15px rgba(0,0,0,.28);
+  clip-path:polygon(50% 0,61% 31%,91% 22%,70% 48%,100% 62%,67% 65%,72% 100%,50% 73%,28% 100%,33% 65%,0 62%,30% 48%,9% 22%,39% 31%);
+}
+.navbar .brand small{
+  display:block;color:#c9a957;font-size:.48em;letter-spacing:2px;
+  font-family:'Manrope';margin-top:-1px
+}
+.navlinks{display:flex;gap:7px;flex-wrap:wrap;flex:1;justify-content:center}
+.navlinks:last-child{flex:0}
+.navlinks button{
+  border-radius:5px!important;font-size:.70em;text-transform:uppercase;
+  letter-spacing:.8px;padding:9px 12px!important
+}
+
+button{
+  cursor:pointer;border:1px solid rgba(205,177,108,.32);
+  background:linear-gradient(180deg,#293747,#182330);
+  color:#e7edf1;padding:10px 15px;border-radius:5px;
+  font-size:.84em;font-weight:800;
+  transition:.18s ease;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.05),0 3px 0 rgba(0,0,0,.18)
+}
+button:hover{
+  border-color:var(--gold);
+  color:#fff5c9;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 5px 16px rgba(0,0,0,.28),0 0 13px rgba(243,201,75,.10);
+  transform:translateY(-1px)
+}
+button:active{transform:translateY(1px)}
+button.primary{
+  color:#201707;border:1px solid #d4aa45;
+  background:linear-gradient(180deg,#ffe68d,#d6aa43);
+  box-shadow:inset 0 1px 0 #fff2ba,0 4px 0 #6e5429,0 7px 18px rgba(0,0,0,.25)
+}
+button.primary:hover{color:#161006;box-shadow:inset 0 1px 0 #fff6cb,0 4px 0 #6e5429,0 0 20px rgba(243,201,75,.18)}
+button.danger{color:#f0aaaa;border-color:rgba(200,89,89,.5);background:#351f24}
+button.ghost{background:#1b2734}
+
+/* ===== BANDEAU ===== */
+.status-bar{
+  padding:8px 26px;display:flex;justify-content:space-between;align-items:center;
+  flex-wrap:wrap;gap:8px;font-size:.65em;letter-spacing:.7px;
+  color:#8796a5;background:#0a121b;border-bottom:1px solid #354251
+}
+.status-bar .dot{
+  display:inline-block;width:7px;height:7px;border-radius:50%;
+  background:#f3c94b;box-shadow:0 0 9px rgba(243,201,75,.7);margin-right:7px
+}
+.status-bar b{color:#e2c66f;letter-spacing:1px}
+.status-bar .tag{color:#667686;text-transform:uppercase}
+
+/* ===== ENTÊTE ===== */
+.crumbs{
+  max-width:1180px;margin:auto;padding:18px 22px 0;
+  color:#73808e;font-size:.66em;text-transform:uppercase;letter-spacing:1.5px
+}
+.crumbs b{color:#d4b45d}
+
+header{max-width:1180px;margin:auto;padding:22px 22px 8px;position:relative}
+.hero{
+  min-height:360px;position:relative;overflow:hidden;
+  display:flex;align-items:center;padding:52px 55px;
+  border:1px solid #9d814b;border-radius:3px;
+  background:
+    linear-gradient(90deg,rgba(24,31,39,.95),rgba(24,35,47,.86)),
+    repeating-linear-gradient(0deg,transparent 0 7px,rgba(255,255,255,.018) 8px);
+  box-shadow:var(--shadow),inset 0 0 0 5px rgba(0,0,0,.10);
+}
+.hero:before{
+  content:"";position:absolute;right:-40px;top:-85px;width:500px;height:500px;
+  background:
+    linear-gradient(122deg,transparent 44%,rgba(255,244,168,.95) 45%,transparent 46%),
+    linear-gradient(139deg,transparent 48%,rgba(243,201,75,.85) 49%,transparent 50%),
+    linear-gradient(31deg,transparent 51%,rgba(110,143,176,.7) 52%,transparent 53%);
+  opacity:.48;transform:rotate(8deg);
+  animation:paperThunder 5s ease-in-out infinite;
+}
+.hero:after{
+  content:"";position:absolute;right:28px;top:24px;width:270px;height:300px;
+  background:
+    radial-gradient(circle,transparent 48%,rgba(207,180,103,.22) 49% 50%,transparent 51%),
+    linear-gradient(90deg,transparent 49.5%,rgba(207,180,103,.16) 50%,transparent 50.5%);
+  opacity:.45;transform:rotate(-12deg)
+}
+.hero-content{position:relative;z-index:2;max-width:700px}
+.hero .pill{
+  display:inline-flex;align-items:center;gap:8px;
+  border:1px solid #9d814b;color:#efd47e;
+  background:rgba(31,39,47,.72);padding:7px 13px;border-radius:2px;
+  font-size:.64em;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;
+}
+.hero .pill:before{
+  content:"⚡";font-size:1em;color:#ffe88d;
+}
+header h1{
+  margin:17px 0 0;font-size:clamp(3rem,7vw,5.8rem);
+  line-height:.85;letter-spacing:1px;text-transform:uppercase;
+  color:#f1e4c0;text-shadow:2px 3px 0 #151b22
+}
+header h1 span{color:#e4bd50}
+header p{margin:20px 0 0;color:#aab5bf;line-height:1.75;font-size:.9em;max-width:600px}
+.hero-sigil{
+  position:absolute;right:9%;bottom:-48px;width:220px;height:220px;
+  border:2px solid rgba(207,180,103,.25);border-radius:50%;
+  opacity:.75
+}
+.hero-sigil:before,.hero-sigil:after{
+  content:"";position:absolute;inset:19px;border:1px dashed rgba(207,180,103,.24);border-radius:50%
+}
+.hero-sigil:after{
+  inset:52px;border-style:solid;transform:rotate(45deg);border-radius:0
+}
+.hero-stats{
+  position:absolute;right:30px;bottom:24px;z-index:3;
+  display:flex;gap:8px
+}
+.hero-stat{
+  min-width:92px;padding:8px 10px;text-align:center;
+  background:rgba(12,19,27,.90);border:1px solid #79633c;border-radius:2px;
+}
+.hero-stat b{display:block;font-family:'Baloo 2';font-size:1.25rem;color:#f1d77f}
+.hero-stat span{font-size:.57em;color:#8995a1;text-transform:uppercase;letter-spacing:1px}
+
+/* ===== SECTIONS ===== */
+.section-title{
+  max-width:1180px;margin:34px auto 16px;padding:0 22px;
+  display:flex;align-items:center;gap:15px;text-align:left
+}
+.section-title h2{
+  margin:0;font-size:1.7rem;text-transform:uppercase;letter-spacing:1px;color:#ead9ac
+}
+.section-title h2:before{content:"⚡ ";color:#e4bd50}
+.section-title:after{
+  content:"";height:1px;flex:1;
+  background:linear-gradient(90deg,#80683e,transparent)
+}
+.wrap{max-width:1180px;margin:auto;padding:0 22px 55px;position:relative;z-index:1}
+.toolbar{
+  display:flex;gap:10px;flex-wrap:wrap;margin:0 0 20px;
+  justify-content:space-between;padding:11px 13px;
+  background:#151f2a;border:1px solid #3a4652;border-left:4px solid #a27f3c
+}
+
+/* ===== DOSSIERS DE GUILDES ===== */
+#list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px}
 .guild{
-  background:radial-gradient(140% 160% at 0% 0%, var(--olive), var(--card) 65%);
-  border:1px solid var(--line);border-radius:16px;padding:18px 20px;margin-bottom:14px;
-  position:relative;overflow:hidden;transition:transform .18s ease, box-shadow .18s ease;
+  --tier-color:#c7a85b;
+  position:relative;overflow:hidden;padding:0;margin:0;
+  border:1px solid #9a7d4a;border-radius:2px;
+  background:
+    linear-gradient(90deg,rgba(233,214,165,.96),rgba(242,225,184,.98) 50%,rgba(222,198,143,.96)),
+    repeating-linear-gradient(0deg,rgba(80,50,20,.025) 0 2px,transparent 2px 6px);
+  color:var(--ink);
+  box-shadow:0 12px 25px rgba(0,0,0,.28),inset 0 0 35px rgba(113,77,30,.12);
+  transition:.2s ease;
 }
-.guild::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--tier-color,var(--gold));
-  box-shadow:0 0 12px var(--tier-color,var(--gold));}
-.guild:hover{transform:translateY(-2px);box-shadow:0 10px 30px rgba(0,0,0,.5);}
-.guild-top{display:flex;align-items:center;gap:12px;cursor:pointer;}
-.medal{font-size:1.4em;width:30px;text-align:center;filter:drop-shadow(0 0 5px rgba(212,175,47,.6));}
-.gname{font-family:'Baloo 2',sans-serif;font-weight:700;font-size:1.2em;flex:1;letter-spacing:.2px;}
-.badge{font-size:.66em;padding:5px 13px;border-radius:999px;font-weight:800;white-space:nowrap;color:#100c04;
-  box-shadow:0 0 12px var(--tier-color,transparent);background:var(--tier-color,var(--gold));text-transform:uppercase;letter-spacing:.5px;}
-.pts{color:var(--sub);font-size:.88em;min-width:74px;text-align:right;font-weight:700;}
-.members-count{color:var(--sub);font-size:.8em;margin-left:42px;margin-top:4px;}
-.detail{margin-top:14px;padding-top:14px;border-top:1px solid var(--line);display:none;}
-.detail.open{display:block;}
-.member-row{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px dashed var(--line);font-size:.9em;}
-.member-row:last-child{border-bottom:none;}
-.role{color:var(--sub);font-size:.78em;}
-.chart-title{margin-top:14px;font-size:.78em;color:var(--sub);text-transform:uppercase;letter-spacing:.8px;font-weight:700;}
-.chart-svg{width:100%;height:auto;display:block;margin-top:6px;background:rgba(0,0,0,.28);border:1px solid var(--line);border-radius:10px;}
-.chart-empty{margin-top:6px;padding:14px;text-align:center;color:var(--sub);font-size:.82em;background:rgba(0,0,0,.2);border:1px dashed var(--line);border-radius:10px;}
-.log{margin-top:12px;font-size:.82em;color:var(--sub);max-height:130px;overflow-y:auto;background:rgba(0,0,0,.3);border-radius:8px;padding:8px 10px;border:1px solid var(--line);}
-.log div{padding:3px 0;border-bottom:1px dashed var(--line);}
-.log div:last-child{border-bottom:none;}
-.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;}
-.empty{text-align:center;color:var(--sub);padding:50px 0;font-weight:600;}
-footer{text-align:center;color:var(--sub);font-size:.75em;padding:20px;opacity:.85;letter-spacing:.5px;}
-.overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);backdrop-filter:blur(3px);display:none;align-items:center;justify-content:center;z-index:50;padding:16px;}
-.overlay.open{display:flex;}
-.modal{background:var(--card2);border:1px solid var(--gold2);border-radius:16px;padding:22px;width:100%;max-width:400px;
-  max-height:85vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.6);}
-.modal h3{margin:0 0 6px;font-size:1.25em;color:var(--gold);font-family:'Baloo 2',sans-serif;}
-.modal p{margin:0 0 14px;color:var(--sub);font-size:.88em;}
-.modal label{display:block;font-size:.78em;color:var(--sub);margin:12px 0 5px;text-transform:uppercase;letter-spacing:.5px;}
-.modal input,.modal select{width:100%;padding:10px 11px;border-radius:8px;border:1px solid var(--line);background:var(--bg2);color:var(--text);font-size:.95em;}
-.modal input:focus,.modal select:focus{outline:none;border-color:var(--gold);}
-.modal-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:20px;}
-.divider{display:flex;align-items:center;gap:10px;margin:16px 0 4px;color:var(--sub);font-size:.75em;text-transform:uppercase;letter-spacing:1px;}
-.divider::before,.divider::after{content:"";flex:1;height:1px;background:var(--line);}
+.guild:before{
+  content:"";position:absolute;left:0;top:0;bottom:0;width:7px;
+  background:var(--tier-color);box-shadow:2px 0 0 rgba(50,30,10,.16);z-index:2
+}
+.guild:after{
+  content:"";position:absolute;right:-45px;top:-55px;width:155px;height:155px;
+  border:2px solid color-mix(in srgb,var(--tier-color) 35%,transparent);
+  border-radius:50%;opacity:.65
+}
+.guild:hover{transform:translateY(-3px) rotate(-.15deg);box-shadow:0 18px 35px rgba(0,0,0,.38),inset 0 0 35px rgba(113,77,30,.12)}
+.guild-top{
+  min-height:82px;padding:16px 18px 10px 24px;
+  display:flex;align-items:center;gap:11px;cursor:pointer;position:relative;z-index:3;
+  border-bottom:1px solid rgba(67,48,24,.20)
+}
+.medal{
+  width:40px;height:40px;display:grid;place-items:center;
+  border-radius:50%;background:#d7bb79;
+  border:2px solid #876a38;font-size:1.15em;
+  box-shadow:inset 0 0 0 3px rgba(255,239,183,.3),0 3px 7px rgba(63,42,17,.2)
+}
+.gname{font-size:1.32rem;font-weight:800;letter-spacing:.3px;flex:1;color:#252b31}
+.badge{
+  font-size:.61em;padding:5px 9px;border-radius:2px;font-weight:900;
+  color:#201707;background:var(--tier-color);
+  border:1px solid rgba(65,44,17,.35);
+  text-transform:uppercase;letter-spacing:.7px
+}
+.pts{color:#5b5a52;font-size:.78em;min-width:66px;text-align:right;font-weight:800}
+.members-count{
+  padding:8px 20px 13px 70px;color:#6c675a;font-size:.65em;
+  text-transform:uppercase;letter-spacing:1px
+}
+.detail{margin:0 18px 17px;padding:16px 0 0;border-top:1px solid rgba(67,48,24,.18);display:none}
+.detail.open{display:block;animation:reveal .22s ease}
+.member-row{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:9px 2px;border-bottom:1px dashed rgba(67,48,24,.18);font-size:.84em
+}
+.member-row:last-child{border-bottom:none}
+.role{color:#777264;font-size:.76em}
+.chart-title{
+  margin-top:15px;font-size:.65em;color:#716a5a;text-transform:uppercase;
+  letter-spacing:1.4px;font-weight:900
+}
+.chart-svg{
+  width:100%;height:auto;display:block;margin-top:7px;
+  background:rgba(80,59,28,.06);border:1px solid rgba(67,48,24,.16);border-radius:2px
+}
+.chart-empty{
+  margin-top:7px;padding:16px;text-align:center;color:#756f62;font-size:.76em;
+  background:rgba(80,59,28,.05);border:1px dashed rgba(67,48,24,.18);border-radius:2px
+}
+.log{
+  margin-top:11px;font-size:.74em;color:#69645a;max-height:145px;overflow-y:auto;
+  background:rgba(255,247,216,.32);border-radius:2px;padding:8px 11px;border:1px solid rgba(67,48,24,.12)
+}
+.log div{padding:5px 0;border-bottom:1px dashed rgba(67,48,24,.15)}
+.log div:last-child{border-bottom:0}
+.actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:13px}
+.actions button{font-size:.72em;padding:8px 10px}
+
+.empty{
+  grid-column:1/-1;text-align:center;color:#aeb8c0;padding:70px 0;
+  border:1px dashed #756342;border-radius:2px;background:#17212b
+}
+footer{
+  text-align:center;color:#697684;font-size:.63em;padding:28px;
+  letter-spacing:1px;text-transform:uppercase
+}
+
+/* ===== PARCHEMINS / MODALES ===== */
+.overlay{
+  position:fixed;inset:0;background:rgba(3,8,13,.82);
+  backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;
+  z-index:50;padding:16px
+}
+.overlay.open{display:flex}
+.modal{
+  position:relative;
+  background:
+    linear-gradient(90deg,rgba(224,201,151,.98),rgba(244,229,190,.99) 48%,rgba(220,194,140,.98)),
+    repeating-linear-gradient(0deg,rgba(80,50,20,.025) 0 2px,transparent 2px 6px);
+  color:var(--ink);
+  border:1px solid #8b6d39;border-radius:2px;padding:26px;
+  width:100%;max-width:540px;max-height:88vh;overflow-y:auto;
+  box-shadow:0 30px 100px rgba(0,0,0,.7),inset 0 0 45px rgba(113,77,30,.12)
+}
+.modal:before{
+  content:"";position:absolute;top:12px;left:14px;right:14px;height:2px;
+  background:linear-gradient(90deg,transparent,#a27d3b,#e4bd50,#a27d3b,transparent)
+}
+.modal:after{
+  content:"";position:absolute;right:12px;bottom:12px;width:55px;height:55px;
+  border-right:2px solid rgba(126,96,45,.35);border-bottom:2px solid rgba(126,96,45,.35);
+  pointer-events:none
+}
+.modal h3{margin:0 0 7px;font-size:1.55em;color:#332b1e;letter-spacing:.5px;text-transform:uppercase}
+.modal p{margin:0 0 14px;color:#675e50;font-size:.8em;line-height:1.6}
+.modal label{display:block;font-size:.66em;color:#6d624e;margin:13px 0 6px;text-transform:uppercase;letter-spacing:1px}
+.modal input,.modal select{
+  width:100%;padding:11px 12px;border-radius:2px;border:1px solid #a88a52;
+  background:rgba(255,246,218,.7);color:#25221c;font-size:.88em
+}
+.modal input:focus,.modal select:focus{outline:none;border-color:#80622f;box-shadow:0 0 0 3px rgba(190,149,67,.16)}
+.modal-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:20px}
+.divider{
+  display:flex;align-items:center;gap:10px;margin:17px 0 5px;color:#77694f;
+  font-size:.63em;text-transform:uppercase;letter-spacing:1.5px
+}
+.divider:before,.divider:after{content:"";flex:1;height:1px;background:rgba(103,79,42,.25)}
+.quick-btn{
+  width:100%;text-align:left;background:rgba(255,244,207,.58);
+  color:#29251e;border:1px solid rgba(103,79,42,.24);border-radius:2px;
+  padding:10px 12px;margin-bottom:7px;display:flex;justify-content:space-between;align-items:center
+}
+.quick-btn:hover{border-color:#a27d3b;background:#fff0c5}
+.quick-btn b{font-family:'Baloo 2';font-size:1em}
+#shopList .quick-btn{margin-bottom:0}
+
+@keyframes paperThunder{
+  0%,100%{transform:rotate(8deg) translate(0,0);opacity:.32}
+  50%{transform:rotate(5deg) translate(-9px,7px);opacity:.62}
+}
+@keyframes reveal{from{opacity:0;transform:translateY(-5px)}to{opacity:1;transform:none}}
+
+@media(max-width:900px){
+  #list{grid-template-columns:1fr}
+  .hero{min-height:380px;padding:40px 32px}
+  .hero-sigil{right:-30px;opacity:.5}
+  .hero-stats{position:relative;right:auto;bottom:auto;margin-top:25px;justify-content:flex-start;flex-wrap:wrap}
+}
+@media(max-width:680px){
+  .navbar{padding:10px 13px}
+  .navbar .brand{width:100%}
+  .navlinks{justify-content:flex-start}
+  .navlinks:last-child{width:100%;justify-content:flex-start}
+  .status-bar{padding:8px 14px}
+  .crumbs{padding:14px 15px 0}
+  header{padding:15px 15px 5px}
+  .hero{padding:34px 22px;border-radius:2px;min-height:410px}
+  header h1{font-size:3.4rem}
+  .hero-sigil{display:none}
+  .section-title{padding:0 15px}
+  .section-title:after{display:none}
+  .wrap{padding:0 15px 40px}
+  .toolbar{margin-bottom:15px}
+  .guild-top{gap:8px;padding-left:17px}
+  .gname{font-size:1.08rem}
+  .badge{font-size:.55em}
+  .pts{font-size:.7em;min-width:auto}
+}
+
 </style>
 </head>
+
 <body>
 <div class="navbar">
-  <div class="brand"><span class="star">⭐</span><span>KUMOGAKURE<small>GUILDES &amp; COMPÉTITION</small></span></div>
+  <div class="brand">
+    <span class="star">⚡</span>
+    <span>KUMOGAKURE<small>GUILDES • COMPÉTITION • SHINOBI</small></span>
+  </div>
   <div class="navlinks">
     <button class="ghost" onclick="showRanks()">🏆 Rangs</button>
-    <button class="ghost" onclick="showMemberRanking()">🏅 Membres</button>
-    <button class="ghost" onclick="showBareme()">📊 Barème</button>
-    <button class="ghost" id="btnHistory" onclick="showPurchaseHistory()" style="">🧾 Historique</button>
+    <button class="ghost" onclick="showMemberRanking()">👥 Membres</button>
+    <button class="ghost" onclick="showBareme()">⚡ Barème</button>
+    <button class="ghost" id="btnHistory" onclick="showPurchaseHistory()">📜 Historique</button>
   </div>
   <div class="navlinks" style="flex:0;">
-    <button class="ghost" id="btnMJ" onclick="toggleRole('mj')">🔓 Quitter le mode MJ</button>
-    <button class="ghost" id="btnChef" onclick="toggleRole('chef')">🔑 Mode Chef de Guilde</button>
+    <button class="ghost" id="btnMJ" onclick="toggleRole('mj')">🔒 Mode MJ</button>
+    <button class="ghost" id="btnChef" onclick="toggleRole('chef')">🔑 Mode Chef</button>
   </div>
 </div>
+
 <div class="status-bar">
-  <div><span class="dot"></span><b>KUMOGAKURE CONNECTÉ</b> — système en ligne</div>
-  <div class="tag">Naruto RP Nouvelle Génération</div>
+  <div><span class="dot"></span><b>ARCHIVES DE KUMOGAKURE</b> — REGISTRE OUVERT</div>
+  <div class="tag">VILLAGE DE LA FOUDRE • REGISTRE SHINOBI</div>
 </div>
-<div class="crumbs"><b>KUMOGAKURE</b> — Portail des guildes</div>
+
+<div class="crumbs"><b>KUMOGAKURE</b> / Archives du village / Registre des guildes</div>
+
 <header>
   <div class="hero">
-    <span class="pill">Système officiel Kumogakure</span>
-    <h1>Guildes</h1>
-    <p>Rejoins une guilde, cumule des points pour ta guilde et grimpe dans le classement, jusqu'à ce que les cieux rendent leur jugement.</p>
+    <div class="hero-content">
+      <span class="pill">Registre officiel • Village caché de la Foudre</span>
+      <h1>Registre des guildes<span>.</span></h1>
+      <p>
+        Consulte les guildes du village, suis leurs membres et leurs points. Chaque mission laisse une trace dans les archives de Kumogakure.
+      </p>
+    </div>
+    <div class="hero-sigil"></div>
+    <div class="hero-stats">
+      <div class="hero-stat"><b id="heroGuilds">—</b><span>Guildes</span></div>
+      <div class="hero-stat"><b id="heroMembers">—</b><span>Shinobi</span></div>
+      <div class="hero-stat"><b>⚡</b><span>En ligne</span></div>
+    </div>
   </div>
 </header>
-<div class="section-title"><h2>Classement des guildes</h2></div>
+
+<div class="section-title">
+  <h2>Registre & classement</h2>
+</div>
+
 <div class="wrap">
   <div class="toolbar">
-    <button class="primary" id="btnNewGuild" onclick="createGuild()" style="">+ Nouvelle guilde</button>
+    <button class="primary" id="btnNewGuild" onclick="createGuild()">📜 Fonder une guilde</button>
   </div>
-  <div id="list"><div class="guild" style="--tier-color:#d4af2f">
-      <div class="guild-top" onclick="toggle('g1790435504225')">
-        <span class="medal">🥇</span>
-        <span class="gname">Yuzik</span>
-        <span class="badge" style="--tier-color:#d4af2f">Aura</span>
-        <span class="pts">1150 pts</span>
-        <span class="pts" style="color:var(--gold);min-width:auto;">🪙 0</span>
-      </div>
-      <div class="members-count">2/10 membres</div>
-      <div class="detail open">
-        <div class="member-row"><span>Fire <span class="role">— Membre · 10 pts</span></span><button onclick="removeMember('g1790435504225',0)">✕</button></div><div class="member-row"><span>Yuzik <span class="role">— Chef de guilde · 2000 pts</span></span><button onclick="removeMember('g1790435504225',1)">✕</button></div>
-        <div class="chart-title">📈 Évolution des points</div>
-        <svg viewBox="0 0 300 130" class="chart-svg" role="img" aria-label="Évolution des points de Yuzik">
-    <defs><linearGradient id="grad_g1790435504225" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#d4af2f" stop-opacity=".45"></stop><stop offset="1" stop-color="#d4af2f" stop-opacity="0"></stop></linearGradient></defs>
-    <line x1="34" y1="110" x2="290" y2="110" stroke="#2e2e22"></line>
-    <line x1="34" y1="12" x2="290" y2="12" stroke="#2e2e22" stroke-dasharray="3 3"></line>
-    <text x="30" y="15" text-anchor="end" font-size="8" fill="#9a9788">2020</text>
-    <text x="30" y="113" text-anchor="end" font-size="8" fill="#9a9788">0</text>
-    <polygon points="34.0,110.0 34.0,110.0 62.4,109.5 90.9,109.0 119.3,12.0 147.8,13.5 176.2,18.3 204.7,17.8 233.1,22.7 261.6,46.9 290.0,54.2 290.0,110.0" fill="url(#grad_g1790435504225)"></polygon>
-    <polyline points="34.0,110.0 62.4,109.5 90.9,109.0 119.3,12.0 147.8,13.5 176.2,18.3 204.7,17.8 233.1,22.7 261.6,46.9 290.0,54.2" fill="none" stroke="#d4af2f" stroke-width="1.8" stroke-linejoin="round"></polyline>
-    <circle cx="34.0" cy="110.0" r="2.8" fill="#d4af2f" stroke="#0a0a08" stroke-width="1"><title>Départ → 0 pts</title></circle><circle cx="62.4" cy="109.5" r="2.8" fill="#d4af2f" stroke="#0a0a08" stroke-width="1"><title>+10 — Mission donnée pour la guilde → 10 pts</title></circle><circle cx="90.9" cy="109.0" r="2.8" fill="#d4af2f" stroke="#0a0a08" stroke-width="1"><title>+10 — Promotion d'un membre → 20 pts</title></circle><circle cx="119.3" cy="12.0" r="2.8" fill="#d4af2f" stroke="#0a0a08" stroke-width="1"><title>+2000 — Mission (Yuzik) → 2020 pts</title></circle><circle cx="147.8" cy="13.5" r="2.8" fill="#d4af2f" stroke="#0a0a08" stroke-width="1"><title>-30 — Mission loupée (Fire) → 1990 pts</title></circle><circle cx="176.2" cy="18.3" r="2.8" fill="#d4af2f" stroke="#0a0a08" stroke-width="1"><title>-100 — 🛒 Réduction à la forge ou corbeau → 1890 pts</title></circle><circle cx="204.7" cy="17.8" r="2.8" fill="#d4af2f" stroke="#0a0a08" stroke-width="1"><title>+10 — Aura (Fire) → 1900 pts</title></circle><circle cx="233.1" cy="22.7" r="2.8" fill="#d4af2f" stroke="#0a0a08" stroke-width="1"><title>-100 — 🛒 Réduction à la forge ou corbeau → 1800 pts</title></circle><circle cx="261.6" cy="46.9" r="2.8" fill="#d4af2f" stroke="#0a0a08" stroke-width="1"><title>-500 — 🛒 Un Pardon (en cas de bêtise) → 1300 pts</title></circle><circle cx="290.0" cy="54.2" r="2.8" fill="#d4af2f" stroke="#0a0a08" stroke-width="1"><title>-150 — 🛒 Mettre un malus à une équipe adverse → 1150 pts</title></circle>
-    <text x="34" y="125" font-size="8" fill="#9a9788">Départ</text>
-    <text x="290" y="125" text-anchor="end" font-size="8" fill="#9a9788">Actuel</text>
-  </svg>
-        <div class="log"><div>-150 pts — 🛒 Mettre un malus à une équipe adverse</div><div>-500 pts — 🛒 Un Pardon (en cas de bêtise)</div><div>-100 pts — 🛒 Réduction à la forge ou corbeau</div><div>+10 pts — Aura <b>(Fire)</b></div><div>-100 pts — 🛒 Réduction à la forge ou corbeau</div><div>-30 pts — Mission loupée <b>(Fire)</b></div><div>+2000 pts — Mission <b>(Yuzik)</b></div><div>+10 pts — Promotion d'un membre</div><div>+10 pts — Mission donnée pour la guilde</div></div>
-        <div class="actions">
-          <button class="primary" onclick="openAddPoints('g1790435504225')">⚡ Ajouter des points</button>
-          <button onclick="openAddGold('g1790435504225')">🪙 Or</button>
-          <button onclick="addMember('g1790435504225')">+ Membre</button>
-          <button onclick="openShop('g1790435504225')">🛒 Boutique</button>
-          <button class="danger" onclick="deleteGuild('g1790435504225')">Supprimer la guilde</button>
-        </div>
-      </div>
-    </div><div class="guild" style="--tier-color:#c9c9d6">
-      <div class="guild-top" onclick="toggle('g1790420951874')">
-        <span class="medal">🥈</span>
-        <span class="gname">Aura</span>
-        <span class="badge" style="--tier-color:#c9c9d6">Ascendant</span>
-        <span class="pts">790 pts</span>
-        <span class="pts" style="color:var(--gold);min-width:auto;">🪙 1</span>
-      </div>
-      <div class="members-count">2/10 membres</div>
-      <div class="detail ">
-        <div class="member-row"><span>Aura <span class="role">— Membre · 20 pts</span></span><button onclick="removeMember('g1790420951874',0)">✕</button></div><div class="member-row"><span>Darnyl <span class="role">— Membre · 10 pts</span></span><button onclick="removeMember('g1790420951874',1)">✕</button></div>
-        <div class="chart-title">📈 Évolution des points</div>
-        <svg viewBox="0 0 300 130" class="chart-svg" role="img" aria-label="Évolution des points de Aura">
-    <defs><linearGradient id="grad_g1790420951874" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#d4af2f" stop-opacity=".45"></stop><stop offset="1" stop-color="#d4af2f" stop-opacity="0"></stop></linearGradient></defs>
-    <line x1="34" y1="110" x2="290" y2="110" stroke="#2e2e22"></line>
-    <line x1="34" y1="12" x2="290" y2="12" stroke="#2e2e22" stroke-dasharray="3 3"></line>
-    <text x="30" y="15" text-anchor="end" font-size="8" fill="#9a9788">2020</text>
-    <text x="30" y="113" text-anchor="end" font-size="8" fill="#9a9788">0</text>
-    <polygon points="34.0,110.0 34.0,110.0 55.3,109.0 76.7,12.0 98.0,14.4 119.3,13.9 140.7,14.9 162.0,14.4 183.3,14.9 204.7,24.6 226.0,48.9 247.3,47.9 268.7,72.2 290.0,71.7 290.0,110.0" fill="url(#grad_g1790420951874)"></polygon>
-    <polyline points="34.0,110.0 55.3,109.0 76.7,12.0 98.0,14.4 119.3,13.9 140.7,14.9 162.0,14.4 183.3,14.9 204.7,24.6 226.0,48.9 247.3,47.9 268.7,72.2 290.0,71.7" fill="none" stroke="#d4af2f" stroke-width="1.8" stroke-linejoin="round"></polyline>
-    <circle cx="34.0" cy="110.0" r="2.8" fill="#d4af2f" stroke="#0a0a08" stroke-width="1"><title>Départ → 0 pts</title></circle><circle cx="55.3" cy="109.0" r="2.8" fill="#d4af2f" stroke="#0a0a08" stroke-width="1"><title>+20 — Mission avec de l'aura → 20 pts</title></circle><circle cx="76.7" cy="12.0" r="2.8" fill="#d4af2f" stroke="#0a0a08" stroke-width="1"><title>+2000 — Mission → 2020 pts</title></circle><circle cx="98.0" cy="14.4" r="2.8" fill="#d4af2f" stroke="#0a0a08" stroke-width="1"><title>-50 — Mauvaise action → 1970 pts</title></circle><circle cx="119.3" cy="13.9" r="2.8" fill="#d4af2f" stroke="#0a0a08" stroke-width="1"><title>+10 — Promotion d'un membre → 1980 pts</title></circle><circle cx="140.7" cy="14.9" r="2.8" fill="#d4af2f" stroke="#0a0a08" stroke-width="1"><title>-20 — Rétrogradation → 1960 pts</title></circle><circle cx="162.0" cy="14.4" r="2.8" fill="#d4af2f" stroke="#0a0a08" stroke-width="1"><title>+10 — Promotion d'un membre → 1970 pts</title></circle><circle cx="183.3" cy="14.9" r="2.8" fill="#d4af2f" stroke="#0a0a08" stroke-width="1"><title>-10 — Combat entre guildes perdu → 1960 pts</title></circle><circle cx="204.7" cy="24.6" r="2.8" fill="#d4af2f" stroke="#0a0a08" stroke-width="1"><title>-200 — 🛒 Réduction à la forge ou corbeau → 1760 pts</title></circle><circle cx="226.0" cy="48.9" r="2.8" fill="#d4af2f" stroke="#0a0a08" stroke-width="1"><title>-500 — 🛒 Un Pardon (en cas de bêtise) → 1260 pts</title></circle><circle cx="247.3" cy="47.9" r="2.8" fill="#d4af2f" stroke="#0a0a08" stroke-width="1"><title>+20 — Combat entre guildes gagné (Aura) → 1280 pts</title></circle><circle cx="268.7" cy="72.2" r="2.8" fill="#d4af2f" stroke="#0a0a08" stroke-width="1"><title>-500 — 🛒 Un Pardon (en cas de bêtise) → 780 pts</title></circle><circle cx="290.0" cy="71.7" r="2.8" fill="#d4af2f" stroke="#0a0a08" stroke-width="1"><title>+10 — Promotion d'un membre (Darnyl) → 790 pts</title></circle>
-    <text x="34" y="125" font-size="8" fill="#9a9788">Départ</text>
-    <text x="290" y="125" text-anchor="end" font-size="8" fill="#9a9788">Actuel</text>
-  </svg>
-        <div class="log"><div>+10 pts — Promotion d'un membre <b>(Darnyl)</b></div><div>-500 pts — 🛒 Un Pardon (en cas de bêtise)</div><div>+20 pts — Combat entre guildes gagné <b>(Aura)</b></div><div>🪙 +1 or — Récompense</div><div>-500 pts — 🛒 Un Pardon (en cas de bêtise)</div><div>-200 pts — 🛒 Réduction à la forge ou corbeau</div><div>-10 pts — Combat entre guildes perdu</div><div>+10 pts — Promotion d'un membre</div><div>-20 pts — Rétrogradation</div><div>+10 pts — Promotion d'un membre</div><div>-50 pts — Mauvaise action</div><div>+2000 pts — Mission</div><div>+20 pts — Mission avec de l'aura</div></div>
-        <div class="actions">
-          <button class="primary" onclick="openAddPoints('g1790420951874')">⚡ Ajouter des points</button>
-          <button onclick="openAddGold('g1790420951874')">🪙 Or</button>
-          <button onclick="addMember('g1790420951874')">+ Membre</button>
-          <button onclick="openShop('g1790420951874')">🛒 Boutique</button>
-          <button class="danger" onclick="deleteGuild('g1790420951874')">Supprimer la guilde</button>
-        </div>
-      </div>
-    </div><div class="guild" style="--tier-color:#8a8a8a">
-      <div class="guild-top" onclick="toggle('g1790422433897')">
-        <span class="medal">🥉</span>
-        <span class="gname">gfhssgsd</span>
-        <span class="badge" style="--tier-color:#8a8a8a">Mortel</span>
-        <span class="pts">10 pts</span>
-        <span class="pts" style="color:var(--gold);min-width:auto;">🪙 0</span>
-      </div>
-      <div class="members-count">1/10 membres</div>
-      <div class="detail ">
-        <div class="member-row"><span>dsqdsqdqs <span class="role">— Chef de guilde · 0 pts</span></span><button onclick="removeMember('g1790422433897',0)">✕</button></div>
-        <div class="chart-title">📈 Évolution des points</div>
-        <div class="chart-empty">Pas encore assez d'actions pour tracer un graphique.</div>
-        <div class="log"><div>+10 pts — Bonne action réalisée par la guilde</div></div>
-        <div class="actions">
-          <button class="primary" onclick="openAddPoints('g1790422433897')">⚡ Ajouter des points</button>
-          <button onclick="openAddGold('g1790422433897')">🪙 Or</button>
-          <button onclick="addMember('g1790422433897')">+ Membre</button>
-          <button onclick="openShop('g1790422433897')">🛒 Boutique</button>
-          <button class="danger" onclick="deleteGuild('g1790422433897')">Supprimer la guilde</button>
-        </div>
-      </div>
-    </div></div>
+  <div id="list"></div>
 </div>
-<footer>Clan &amp; Guildes — Kumogakure · classement mis à jour en direct</footer>
+
+<footer>Kumogakure • Guildes & Compétition • Système synchronisé en direct</footer>
 
 <div class="overlay" id="overlay">
   <div class="modal" id="modalBox"></div>
@@ -394,7 +609,15 @@ function guildChart(g){
   </svg>`;
 }
 
+function updateHeroStats(){
+  const hg=document.getElementById('heroGuilds');
+  const hm=document.getElementById('heroMembers');
+  if(hg) hg.textContent=DATA.guilds.length;
+  if(hm) hm.textContent=DATA.guilds.reduce((n,g)=>n+(g.members||[]).length,0);
+}
+
 function render(){
+  updateHeroStats();
   const list = document.getElementById('list');
   if(!DATA.guilds.length){
     list.innerHTML = '<div class="empty">Aucune guilde pour l\'instant.<br>Crée la première avec le bouton ci-dessus.</div>';
