@@ -1,0 +1,1088 @@
+<html lang="fr" data-theme="dark" style="color-scheme: dark;"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>⚡ Kumogakure — Guildes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&amp;family=Manrope:wght@400;500;700;800&amp;display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{
+  --ink:#171b22;
+  --ink2:#27313d;
+  --night:#101722;
+  --night2:#182332;
+  --cloud:#dfe7ed;
+  --paper:#e9d6a5;
+  --paper2:#f4e6bf;
+  --paper3:#c9ad72;
+  --paper-dark:#8d7040;
+  --gold:#f3c94b;
+  --gold2:#ffe28a;
+  --bolt:#fff4a8;
+  --blue:#527da8;
+  --blue2:#314e70;
+  --red:#9d4545;
+  --green:#5f8a69;
+  --line:rgba(38,28,16,.24);
+  --shadow:0 18px 45px rgba(0,0,0,.34);
+  box-sizing:border-box;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:88px}
+body{
+  margin:0;min-height:100vh;color:var(--cloud);
+  font-family:'Manrope',Arial,sans-serif;
+  background:
+    radial-gradient(circle at 50% -10%,rgba(92,130,164,.28),transparent 32%),
+    linear-gradient(180deg,#101925 0%,#0d141d 45%,#111923 100%);
+  overflow-x:hidden;
+}
+body:before{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:-1;
+  opacity:.20;
+  background:
+    radial-gradient(circle at 15% 30%,rgba(255,255,255,.07) 0 1px,transparent 2px),
+    radial-gradient(circle at 70% 75%,rgba(255,255,255,.05) 0 1px,transparent 2px);
+  background-size:90px 90px,130px 130px;
+}
+body:after{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:25;
+  background:linear-gradient(90deg,rgba(0,0,0,.16),transparent 12%,transparent 88%,rgba(0,0,0,.2));
+}
+h1,h2,h3,.gname{font-family:'Baloo 2',sans-serif}
+button,input,select{font-family:inherit}
+
+/* ===== NAVIGATION : bois sombre + parchemin ===== */
+.navbar{
+  position:sticky;top:0;z-index:30;
+  min-height:76px;padding:10px 24px;
+  display:flex;align-items:center;gap:18px;flex-wrap:wrap;
+  background:
+    linear-gradient(180deg,rgba(19,29,41,.98),rgba(10,17,25,.98));
+  border-bottom:3px solid #80663b;
+  box-shadow:0 5px 0 rgba(0,0,0,.22),0 14px 35px rgba(0,0,0,.25);
+}
+.navbar:after{
+  content:"";position:absolute;left:0;right:0;bottom:-6px;height:2px;
+  background:linear-gradient(90deg,transparent,var(--gold),var(--bolt),var(--gold),transparent);
+  opacity:.7;
+}
+.navbar .brand{
+  display:flex;align-items:center;gap:12px;min-width:max-content;
+  font-family:'Baloo 2';font-weight:800;font-size:1.22rem;letter-spacing:1px;
+}
+.navbar .brand .star{
+  width:45px;height:45px;display:grid;place-items:center;
+  border:2px solid #a17f3e;border-radius:7px;
+  color:#111;background:linear-gradient(145deg,#f7df8d,#bd963f);
+  box-shadow:inset 0 0 0 3px rgba(255,255,255,.15),0 5px 15px rgba(0,0,0,.28);
+  clip-path:polygon(50% 0,61% 31%,91% 22%,70% 48%,100% 62%,67% 65%,72% 100%,50% 73%,28% 100%,33% 65%,0 62%,30% 48%,9% 22%,39% 31%);
+}
+.navbar .brand small{
+  display:block;color:#c9a957;font-size:.48em;letter-spacing:2px;
+  font-family:'Manrope';margin-top:-1px
+}
+.navlinks{display:flex;gap:7px;flex-wrap:wrap;flex:1;justify-content:center}
+.navlinks:last-child{flex:0}
+.navlinks button{
+  border-radius:5px!important;font-size:.70em;text-transform:uppercase;
+  letter-spacing:.8px;padding:9px 12px!important
+}
+
+button{
+  cursor:pointer;border:1px solid rgba(205,177,108,.32);
+  background:linear-gradient(180deg,#293747,#182330);
+  color:#e7edf1;padding:10px 15px;border-radius:5px;
+  font-size:.84em;font-weight:800;
+  transition:.18s ease;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.05),0 3px 0 rgba(0,0,0,.18)
+}
+button:hover{
+  border-color:var(--gold);
+  color:#fff5c9;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 5px 16px rgba(0,0,0,.28),0 0 13px rgba(243,201,75,.10);
+  transform:translateY(-1px)
+}
+button:active{transform:translateY(1px)}
+button.primary{
+  color:#201707;border:1px solid #d4aa45;
+  background:linear-gradient(180deg,#ffe68d,#d6aa43);
+  box-shadow:inset 0 1px 0 #fff2ba,0 4px 0 #6e5429,0 7px 18px rgba(0,0,0,.25)
+}
+button.primary:hover{color:#161006;box-shadow:inset 0 1px 0 #fff6cb,0 4px 0 #6e5429,0 0 20px rgba(243,201,75,.18)}
+button.danger{color:#f0aaaa;border-color:rgba(200,89,89,.5);background:#351f24}
+button.ghost{background:#1b2734}
+
+/* ===== BANDEAU ===== */
+.status-bar{
+  padding:8px 26px;display:flex;justify-content:space-between;align-items:center;
+  flex-wrap:wrap;gap:8px;font-size:.65em;letter-spacing:.7px;
+  color:#8796a5;background:#0a121b;border-bottom:1px solid #354251
+}
+.status-bar .dot{
+  display:inline-block;width:7px;height:7px;border-radius:50%;
+  background:#f3c94b;box-shadow:0 0 9px rgba(243,201,75,.7);margin-right:7px
+}
+.status-bar b{color:#e2c66f;letter-spacing:1px}
+.status-bar .tag{color:#667686;text-transform:uppercase}
+
+/* ===== ENTÊTE ===== */
+.crumbs{
+  max-width:1180px;margin:auto;padding:18px 22px 0;
+  color:#73808e;font-size:.66em;text-transform:uppercase;letter-spacing:1.5px
+}
+.crumbs b{color:#d4b45d}
+
+header{max-width:1180px;margin:auto;padding:22px 22px 8px;position:relative}
+.hero{
+  min-height:360px;position:relative;overflow:hidden;
+  display:flex;align-items:center;padding:52px 55px;
+  border:1px solid #9d814b;border-radius:3px;
+  background:
+    linear-gradient(90deg,rgba(24,31,39,.95),rgba(24,35,47,.86)),
+    repeating-linear-gradient(0deg,transparent 0 7px,rgba(255,255,255,.018) 8px);
+  box-shadow:var(--shadow),inset 0 0 0 5px rgba(0,0,0,.10);
+}
+.hero:before{
+  content:"";position:absolute;right:-40px;top:-85px;width:500px;height:500px;
+  background:
+    linear-gradient(122deg,transparent 44%,rgba(255,244,168,.95) 45%,transparent 46%),
+    linear-gradient(139deg,transparent 48%,rgba(243,201,75,.85) 49%,transparent 50%),
+    linear-gradient(31deg,transparent 51%,rgba(110,143,176,.7) 52%,transparent 53%);
+  opacity:.48;transform:rotate(8deg);
+  animation:paperThunder 5s ease-in-out infinite;
+}
+.hero:after{
+  content:"";position:absolute;right:28px;top:24px;width:270px;height:300px;
+  background:
+    radial-gradient(circle,transparent 48%,rgba(207,180,103,.22) 49% 50%,transparent 51%),
+    linear-gradient(90deg,transparent 49.5%,rgba(207,180,103,.16) 50%,transparent 50.5%);
+  opacity:.45;transform:rotate(-12deg)
+}
+.hero-content{position:relative;z-index:2;max-width:700px}
+.hero .pill{
+  display:inline-flex;align-items:center;gap:8px;
+  border:1px solid #9d814b;color:#efd47e;
+  background:rgba(31,39,47,.72);padding:7px 13px;border-radius:2px;
+  font-size:.64em;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;
+}
+.hero .pill:before{
+  content:"⚡";font-size:1em;color:#ffe88d;
+}
+header h1{
+  margin:17px 0 0;font-size:clamp(3rem,7vw,5.8rem);
+  line-height:.85;letter-spacing:1px;text-transform:uppercase;
+  color:#f1e4c0;text-shadow:2px 3px 0 #151b22
+}
+header h1 span{color:#e4bd50}
+header p{margin:20px 0 0;color:#aab5bf;line-height:1.75;font-size:.9em;max-width:600px}
+.hero-sigil{
+  position:absolute;right:9%;bottom:-48px;width:220px;height:220px;
+  border:2px solid rgba(207,180,103,.25);border-radius:50%;
+  opacity:.75
+}
+.hero-sigil:before,.hero-sigil:after{
+  content:"";position:absolute;inset:19px;border:1px dashed rgba(207,180,103,.24);border-radius:50%
+}
+.hero-sigil:after{
+  inset:52px;border-style:solid;transform:rotate(45deg);border-radius:0
+}
+.hero-stats{
+  position:absolute;right:30px;bottom:24px;z-index:3;
+  display:flex;gap:8px
+}
+.hero-stat{
+  min-width:92px;padding:8px 10px;text-align:center;
+  background:rgba(12,19,27,.90);border:1px solid #79633c;border-radius:2px;
+}
+.hero-stat b{display:block;font-family:'Baloo 2';font-size:1.25rem;color:#f1d77f}
+.hero-stat span{font-size:.57em;color:#8995a1;text-transform:uppercase;letter-spacing:1px}
+
+/* ===== SECTIONS ===== */
+.section-title{
+  max-width:1180px;margin:34px auto 16px;padding:0 22px;
+  display:flex;align-items:center;gap:15px;text-align:left
+}
+.section-title h2{
+  margin:0;font-size:1.7rem;text-transform:uppercase;letter-spacing:1px;color:#ead9ac
+}
+.section-title h2:before{content:"⚡ ";color:#e4bd50}
+.section-title:after{
+  content:"";height:1px;flex:1;
+  background:linear-gradient(90deg,#80683e,transparent)
+}
+.wrap{max-width:1180px;margin:auto;padding:0 22px 55px;position:relative;z-index:1}
+.toolbar{
+  display:flex;gap:10px;flex-wrap:wrap;margin:0 0 20px;
+  justify-content:space-between;padding:11px 13px;
+  background:#151f2a;border:1px solid #3a4652;border-left:4px solid #a27f3c
+}
+
+/* ===== DOSSIERS DE GUILDES ===== */
+#list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px}
+.guild{
+  --tier-color:#c7a85b;
+  position:relative;overflow:hidden;padding:0;margin:0;
+  border:1px solid #9a7d4a;border-radius:2px;
+  background:
+    linear-gradient(90deg,rgba(233,214,165,.96),rgba(242,225,184,.98) 50%,rgba(222,198,143,.96)),
+    repeating-linear-gradient(0deg,rgba(80,50,20,.025) 0 2px,transparent 2px 6px);
+  color:var(--ink);
+  box-shadow:0 12px 25px rgba(0,0,0,.28),inset 0 0 35px rgba(113,77,30,.12);
+  transition:.2s ease;
+}
+.guild:before{
+  content:"";position:absolute;left:0;top:0;bottom:0;width:7px;
+  background:var(--tier-color);box-shadow:2px 0 0 rgba(50,30,10,.16);z-index:2
+}
+.guild:after{
+  content:"";position:absolute;right:-45px;top:-55px;width:155px;height:155px;
+  border:2px solid color-mix(in srgb,var(--tier-color) 35%,transparent);
+  border-radius:50%;opacity:.65
+}
+.guild:hover{transform:translateY(-3px) rotate(-.15deg);box-shadow:0 18px 35px rgba(0,0,0,.38),inset 0 0 35px rgba(113,77,30,.12)}
+.guild-top{
+  min-height:82px;padding:16px 18px 10px 24px;
+  display:flex;align-items:center;gap:11px;cursor:pointer;position:relative;z-index:3;
+  border-bottom:1px solid rgba(67,48,24,.20)
+}
+.medal{
+  width:40px;height:40px;display:grid;place-items:center;
+  border-radius:50%;background:#d7bb79;
+  border:2px solid #876a38;font-size:1.15em;
+  box-shadow:inset 0 0 0 3px rgba(255,239,183,.3),0 3px 7px rgba(63,42,17,.2)
+}
+.gname{font-size:1.32rem;font-weight:800;letter-spacing:.3px;flex:1;color:#252b31}
+.badge{
+  font-size:.61em;padding:5px 9px;border-radius:2px;font-weight:900;
+  color:#201707;background:var(--tier-color);
+  border:1px solid rgba(65,44,17,.35);
+  text-transform:uppercase;letter-spacing:.7px
+}
+.pts{color:#5b5a52;font-size:.78em;min-width:66px;text-align:right;font-weight:800}
+.members-count{
+  padding:8px 20px 13px 70px;color:#6c675a;font-size:.65em;
+  text-transform:uppercase;letter-spacing:1px
+}
+.detail{margin:0 18px 17px;padding:16px 0 0;border-top:1px solid rgba(67,48,24,.18);display:none}
+.detail.open{display:block;animation:reveal .22s ease}
+.member-row{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:9px 2px;border-bottom:1px dashed rgba(67,48,24,.18);font-size:.84em
+}
+.member-row:last-child{border-bottom:none}
+.role{color:#777264;font-size:.76em}
+.chart-title{
+  margin-top:15px;font-size:.65em;color:#716a5a;text-transform:uppercase;
+  letter-spacing:1.4px;font-weight:900
+}
+.chart-svg{
+  width:100%;height:auto;display:block;margin-top:7px;
+  background:rgba(80,59,28,.06);border:1px solid rgba(67,48,24,.16);border-radius:2px
+}
+.chart-empty{
+  margin-top:7px;padding:16px;text-align:center;color:#756f62;font-size:.76em;
+  background:rgba(80,59,28,.05);border:1px dashed rgba(67,48,24,.18);border-radius:2px
+}
+.log{
+  margin-top:11px;font-size:.74em;color:#69645a;max-height:145px;overflow-y:auto;
+  background:rgba(255,247,216,.32);border-radius:2px;padding:8px 11px;border:1px solid rgba(67,48,24,.12)
+}
+.log div{padding:5px 0;border-bottom:1px dashed rgba(67,48,24,.15)}
+.log div:last-child{border-bottom:0}
+.actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:13px}
+.actions button{font-size:.72em;padding:8px 10px}
+
+.empty{
+  grid-column:1/-1;text-align:center;color:#aeb8c0;padding:70px 0;
+  border:1px dashed #756342;border-radius:2px;background:#17212b
+}
+footer{
+  text-align:center;color:#697684;font-size:.63em;padding:28px;
+  letter-spacing:1px;text-transform:uppercase
+}
+
+/* ===== PARCHEMINS / MODALES ===== */
+.overlay{
+  position:fixed;inset:0;background:rgba(3,8,13,.82);
+  backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;
+  z-index:50;padding:16px
+}
+.overlay.open{display:flex}
+.modal{
+  position:relative;
+  background:
+    linear-gradient(90deg,rgba(224,201,151,.98),rgba(244,229,190,.99) 48%,rgba(220,194,140,.98)),
+    repeating-linear-gradient(0deg,rgba(80,50,20,.025) 0 2px,transparent 2px 6px);
+  color:var(--ink);
+  border:1px solid #8b6d39;border-radius:2px;padding:26px;
+  width:100%;max-width:540px;max-height:88vh;overflow-y:auto;
+  box-shadow:0 30px 100px rgba(0,0,0,.7),inset 0 0 45px rgba(113,77,30,.12)
+}
+.modal:before{
+  content:"";position:absolute;top:12px;left:14px;right:14px;height:2px;
+  background:linear-gradient(90deg,transparent,#a27d3b,#e4bd50,#a27d3b,transparent)
+}
+.modal:after{
+  content:"";position:absolute;right:12px;bottom:12px;width:55px;height:55px;
+  border-right:2px solid rgba(126,96,45,.35);border-bottom:2px solid rgba(126,96,45,.35);
+  pointer-events:none
+}
+.modal h3{margin:0 0 7px;font-size:1.55em;color:#332b1e;letter-spacing:.5px;text-transform:uppercase}
+.modal p{margin:0 0 14px;color:#675e50;font-size:.8em;line-height:1.6}
+.modal label{display:block;font-size:.66em;color:#6d624e;margin:13px 0 6px;text-transform:uppercase;letter-spacing:1px}
+.modal input,.modal select{
+  width:100%;padding:11px 12px;border-radius:2px;border:1px solid #a88a52;
+  background:rgba(255,246,218,.7);color:#25221c;font-size:.88em
+}
+.modal input:focus,.modal select:focus{outline:none;border-color:#80622f;box-shadow:0 0 0 3px rgba(190,149,67,.16)}
+.modal-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:20px}
+.divider{
+  display:flex;align-items:center;gap:10px;margin:17px 0 5px;color:#77694f;
+  font-size:.63em;text-transform:uppercase;letter-spacing:1.5px
+}
+.divider:before,.divider:after{content:"";flex:1;height:1px;background:rgba(103,79,42,.25)}
+.quick-btn{
+  width:100%;text-align:left;background:rgba(255,244,207,.58);
+  color:#29251e;border:1px solid rgba(103,79,42,.24);border-radius:2px;
+  padding:10px 12px;margin-bottom:7px;display:flex;justify-content:space-between;align-items:center
+}
+.quick-btn:hover{border-color:#a27d3b;background:#fff0c5}
+.quick-btn b{font-family:'Baloo 2';font-size:1em}
+#shopList .quick-btn{margin-bottom:0}
+
+@keyframes paperThunder{
+  0%,100%{transform:rotate(8deg) translate(0,0);opacity:.32}
+  50%{transform:rotate(5deg) translate(-9px,7px);opacity:.62}
+}
+@keyframes reveal{from{opacity:0;transform:translateY(-5px)}to{opacity:1;transform:none}}
+
+@media(max-width:900px){
+  #list{grid-template-columns:1fr}
+  .hero{min-height:380px;padding:40px 32px}
+  .hero-sigil{right:-30px;opacity:.5}
+  .hero-stats{position:relative;right:auto;bottom:auto;margin-top:25px;justify-content:flex-start;flex-wrap:wrap}
+}
+@media(max-width:680px){
+  .navbar{padding:10px 13px}
+  .navbar .brand{width:100%}
+  .navlinks{justify-content:flex-start}
+  .navlinks:last-child{width:100%;justify-content:flex-start}
+  .status-bar{padding:8px 14px}
+  .crumbs{padding:14px 15px 0}
+  header{padding:15px 15px 5px}
+  .hero{padding:34px 22px;border-radius:2px;min-height:410px}
+  header h1{font-size:3.4rem}
+  .hero-sigil{display:none}
+  .section-title{padding:0 15px}
+  .section-title:after{display:none}
+  .wrap{padding:0 15px 40px}
+  .toolbar{margin-bottom:15px}
+  .guild-top{gap:8px;padding-left:17px}
+  .gname{font-size:1.08rem}
+  .badge{font-size:.55em}
+  .pts{font-size:.7em;min-width:auto}
+}
+
+</style>
+</head>
+
+<body>
+<div class="navbar">
+  <div class="brand">
+    <span class="star">⚡</span>
+    <span>KUMOGAKURE<small>GUILDES • COMPÉTITION • SHINOBI</small></span>
+  </div>
+  <div class="navlinks">
+    <button class="ghost" onclick="showRanks()">🏆 Rangs</button>
+    <button class="ghost" onclick="showMemberRanking()">👥 Membres</button>
+    <button class="ghost" onclick="showBareme()">⚡ Barème</button>
+    <button class="ghost" id="btnHistory" onclick="showPurchaseHistory()">📜 Historique</button>
+  </div>
+  <div class="navlinks" style="flex:0;">
+    <button class="ghost" id="btnMJ" onclick="toggleRole('mj')">🔒 Mode MJ</button>
+    <button class="ghost" id="btnChef" onclick="toggleRole('chef')">🔑 Mode Chef</button>
+  </div>
+</div>
+
+<div class="status-bar">
+  <div><span class="dot"></span><b>ARCHIVES DE KUMOGAKURE</b> — REGISTRE OUVERT</div>
+  <div class="tag">VILLAGE DE LA FOUDRE • REGISTRE SHINOBI</div>
+</div>
+
+<div class="crumbs"><b>KUMOGAKURE</b> / Archives du village / Registre des guildes</div>
+
+<header>
+  <div class="hero">
+    <div class="hero-content">
+      <span class="pill">Registre officiel • Village caché de la Foudre</span>
+      <h1>Registre des guildes<span>.</span></h1>
+      <p>
+        Consulte les guildes du village, suis leurs membres et leurs points. Chaque mission laisse une trace dans les archives de Kumogakure.
+      </p>
+    </div>
+    <div class="hero-sigil"></div>
+    <div class="hero-stats">
+      <div class="hero-stat"><b id="heroGuilds">—</b><span>Guildes</span></div>
+      <div class="hero-stat"><b id="heroMembers">—</b><span>Shinobi</span></div>
+      <div class="hero-stat"><b>⚡</b><span>En ligne</span></div>
+    </div>
+  </div>
+</header>
+
+<div class="section-title">
+  <h2>Registre & classement</h2>
+</div>
+
+<div class="wrap">
+  <div class="toolbar">
+    <button class="primary" id="btnNewGuild" onclick="createGuild()">📜 Fonder une guilde</button>
+  </div>
+  <div id="list"></div>
+</div>
+
+<footer>Kumogakure • Guildes & Compétition • Système synchronisé en direct</footer>
+
+<div class="overlay" id="overlay">
+  <div class="modal" id="modalBox"></div>
+</div>
+
+<script id="app-data" type="application/json">{"guilds":[{"id":"g1790420951874","name":"Aura","points":790,"members":[{"name":"Aura","role":"Membre","points":20},{"name":"Darnyl","role":"Membre","points":10}],"log":[{"pts":20,"reason":"Mission avec de l'aura"},{"pts":2000,"reason":"Mission"},{"pts":-50,"reason":"Mauvaise action"},{"pts":10,"reason":"Promotion d'un membre"},{"pts":-20,"reason":"Rétrogradation"},{"pts":10,"reason":"Promotion d'un membre"},{"pts":-10,"reason":"Combat entre guildes perdu"},{"pts":-200,"reason":"🛒 Réduction à la forge ou corbeau"},{"pts":-500,"reason":"🛒 Un Pardon (en cas de bêtise)"},{"gold":1,"reason":"Récompense"},{"pts":20,"reason":"Combat entre guildes gagné","member":"Aura"},{"pts":-500,"reason":"🛒 Un Pardon (en cas de bêtise)"},{"pts":10,"reason":"Promotion d'un membre","member":"Darnyl"}],"gold":1},{"id":"g1790422433897","name":"gfhssgsd","points":10,"members":[{"name":"dsqdsqdqs","role":"Chef de guilde"}],"log":[{"pts":10,"reason":"Bonne action réalisée par la guilde"}]},{"id":"g1790435504225","name":"Yuzik","points":1150,"members":[{"name":"Fire","role":"Membre","points":10},{"name":"Yuzik","role":"Chef de guilde","points":2000}],"log":[{"pts":10,"reason":"Mission donnée pour la guilde"},{"pts":10,"reason":"Promotion d'un membre"},{"pts":2000,"reason":"Mission","member":"Yuzik"},{"pts":-30,"reason":"Mission loupée","member":"Fire"},{"pts":-100,"reason":"🛒 Réduction à la forge ou corbeau"},{"pts":10,"reason":"Aura","member":"Fire"},{"pts":-100,"reason":"🛒 Réduction à la forge ou corbeau"},{"pts":-500,"reason":"🛒 Un Pardon (en cas de bêtise)"},{"pts":-150,"reason":"🛒 Mettre un malus à une équipe adverse"}]}],"purchases":[{"guild":"Aura","item":"Réduction à la forge ou corbeau","cost":200,"date":"26/09/2026"},{"guild":"Aura","item":"Un Pardon (en cas de bêtise)","cost":500,"date":"26/09/2026"},{"guild":"Aura","item":"Un Pardon (en cas de bêtise)","cost":500,"date":"26/09/2026"},{"guild":"Yuzik","item":"Réduction à la forge ou corbeau","cost":100,"date":"27/09/2026"},{"guild":"Yuzik","item":"Réduction à la forge ou corbeau","cost":100,"date":"27/09/2026"},{"guild":"Yuzik","item":"Un Pardon (en cas de bêtise)","cost":500,"date":"27/09/2026"},{"guild":"Yuzik","item":"Mettre un malus à une équipe adverse","cost":150,"currency":"pts","date":"28/09/2026"}],"pointRules":[{"label":"Mission donnée pour la guilde","pts":10},{"label":"Bonne action réalisée par la guilde","pts":10},{"label":"Combat entre guildes gagné","pts":20},{"label":"Combat entre guildes perdu","pts":-10},{"label":"Mission loupée","pts":-30},{"label":"Mauvaise action","pts":-50},{"label":"Promotion d'un membre","pts":10},{"label":"Rétrogradation","pts":-20}],"shopItems":[{"label":"Être pris forcément au prochain capture","cost":50},{"label":"Passage Genin Confirmé","cost":250},{"label":"Un Pardon (en cas de bêtise)","cost":500},{"label":"Mettre un malus à une équipe adverse","cost":150},{"label":"Entraînement perso avec n'importe quel HG","cost":250}],"goldShopItems":[],"tiers":[{"name":"Éternel","min":2250,"color":"#ff5d6c"},{"name":"Divin","min":1700,"color":"#b58cf0"},{"name":"Archange","min":1250,"color":"#6fb3f0"},{"name":"Séraphin","min":900,"color":"#4fd1c5"},{"name":"Aura","min":1000,"color":"#d4af2f"},{"name":"Ascendant","min":350,"color":"#c9c9d6"},{"name":"Élu","min":150,"color":"#c07a3e"},{"name":"Mortel","min":0,"color":"#8a8a8a"}]}</script>
+
+<script>
+const DEFAULT_TIERS = [
+  {name:"Éternel",    min:2250, color:"#ff5d6c"},
+  {name:"Divin",      min:1700, color:"#b58cf0"},
+  {name:"Archange",   min:1250, color:"#6fb3f0"},
+  {name:"Séraphin",   min:900,  color:"#4fd1c5"},
+  {name:"Céleste",    min:600,  color:"#d4af2f"},
+  {name:"Ascendant",  min:350,  color:"#c9c9d6"},
+  {name:"Élu",        min:150,  color:"#c07a3e"},
+  {name:"Mortel",     min:0,    color:"#8a8a8a"},
+];
+function tierFor(pts){
+  const list = [...DATA.tiers].sort((a,b)=>b.min-a.min);
+  return list.find(t=>pts>=t.min) || {name:"Sans rang", min:0, color:"#8a8a8a"};
+}
+
+const DEFAULT_POINT_RULES = [
+  {label:"Mission donnée pour la guilde", pts:10},
+  {label:"Bonne action réalisée par la guilde", pts:10},
+  {label:"Combat entre guildes gagné", pts:20},
+  {label:"Combat entre guildes perdu", pts:-10},
+  {label:"Prime réalisée par la guilde", pts:null, perRank:5},
+  {label:"Mission loupée", pts:-30},
+  {label:"Mauvaise action", pts:-50},
+  {label:"Promotion d'un membre", pts:10},
+  {label:"Rétrogradation", pts:-20}
+];
+
+const DEFAULT_SHOP_ITEMS = [
+  {label:"Réduction à la forge ou corbeau", cost:100},
+  {label:"Être pris forcément au prochain capture", cost:50},
+  {label:"Passage Genin Confirmé", cost:250},
+  {label:"Un Pardon (en cas de bêtise)", cost:500},
+  {label:"Mettre un malus à une équipe adverse", cost:150},
+  {label:"Entraînement perso avec n'importe quel HG", cost:250}
+];
+
+let DATA = JSON.parse(document.getElementById('app-data').textContent);
+DATA.pointRules = DATA.pointRules || DEFAULT_POINT_RULES.slice();
+DATA.tiers = DATA.tiers || DEFAULT_TIERS.map(t=>({...t}));
+DATA.shopItems = DATA.shopItems || DEFAULT_SHOP_ITEMS.map(i=>({...i}));
+DATA.goldShopItems = DATA.goldShopItems || [];
+let openId = null;
+const ROLES = {
+  mj:   { password:"BroXBoubou", key:"kumo_mj_v2",   label:"Mode MJ" },
+  chef: { password:"21389K",     key:"kumo_chef_v2", label:"Mode Chef de Guilde" }
+};
+let roles = {
+  mj:   localStorage.getItem(ROLES.mj.key) === '1',
+  chef: localStorage.getItem(ROLES.chef.key) === '1'
+};
+function canManage(){ return roles.mj; }
+function canAddMembers(){ return roles.mj || roles.chef; }
+
+// ================= SUPABASE (sauvegarde + synchro en direct) =================
+// 1. Crée un projet sur https://supabase.com
+// 2. Exécute le fichier supabase-setup.sql fourni dans le SQL Editor de ton projet
+// 3. Remplace les deux valeurs ci-dessous (Project Settings > API) :
+const SUPABASE_URL = "https://ubjutijaucpbvmadpqyj.supabase.co";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVianV0aWphdWNwYnZtYWRwcXlqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA2Njc2NTAsImV4cCI6MjEwNjI0MzY1MH0.unCDYCwhzVenHwGvFnri6Tb8jqQs4_hmIRTIOOipgvw";
+
+let sb = null;
+let suppressEcho = false; // évite de se ré-appliquer à soi-même l'update qu'on vient d'envoyer
+const supabaseReady = SUPABASE_URL.startsWith('http') && SUPABASE_ANON_KEY.length > 20;
+
+if(supabaseReady && window.supabase){
+  sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+} else if(!supabaseReady){
+  console.warn("Supabase non configuré — remplis SUPABASE_URL et SUPABASE_ANON_KEY en haut du script. Le site fonctionne pour l'instant en local uniquement (rien n'est partagé ni sauvegardé).");
+}
+
+function mergeIncomingData(incoming){
+  DATA = incoming;
+  DATA.pointRules = DATA.pointRules || DEFAULT_POINT_RULES.slice();
+  DATA.tiers = DATA.tiers || DEFAULT_TIERS.map(t=>({...t}));
+  DATA.shopItems = DATA.shopItems || DEFAULT_SHOP_ITEMS.map(i=>({...i}));
+  DATA.goldShopItems = DATA.goldShopItems || [];
+}
+
+async function loadFromSupabase(){
+  if(!sb) return;
+  try{
+    const { data, error } = await sb.from('app_state').select('data').eq('id','main').single();
+    if(error) throw error;
+    if(data && data.data){ mergeIncomingData(data.data); render(); }
+  }catch(e){
+    console.warn('Chargement Supabase impossible, on garde les données locales de secours :', e.message||e);
+  }
+}
+
+function subscribeRealtime(){
+  if(!sb) return;
+  sb.channel('app_state_live')
+    .on('postgres_changes', {event:'UPDATE', schema:'public', table:'app_state', filter:'id=eq.main'}, (payload)=>{
+      if(suppressEcho) return;
+      if(payload.new && payload.new.data){ mergeIncomingData(payload.new.data); render(); }
+    })
+    .subscribe();
+}
+if(sb){ loadFromSupabase().then(subscribeRealtime); }
+
+function updateRoleButtons(){
+  document.getElementById('btnMJ').textContent = roles.mj ? '🔓 Quitter le mode MJ' : '🔒 Mode MJ';
+  document.getElementById('btnChef').textContent = roles.chef ? '🔓 Quitter le mode Chef' : '🔑 Mode Chef de Guilde';
+  document.getElementById('btnNewGuild').style.display = canManage() ? '' : 'none';
+  document.getElementById('btnHistory').style.display = canManage() ? '' : 'none';
+}
+function toggleRole(roleName){
+  const r = ROLES[roleName];
+  if(roles[roleName]){
+    roles[roleName] = false;
+    localStorage.removeItem(r.key);
+    updateRoleButtons();
+    render();
+    return;
+  }
+  openForm(r.label, [{id:'pwd', label:'Mot de passe', type:'password'}], (v)=>{
+    if(v.pwd === r.password){
+      roles[roleName] = true;
+      localStorage.setItem(r.key,'1');
+      updateRoleButtons();
+      render();
+    } else {
+      openInfo("Mot de passe incorrect", "Réessaie avec le bon mot de passe.");
+    }
+  }, "Déverrouiller");
+}
+
+function guildChart(g){
+  const pts=[0], labels=['Départ'];
+  let run=0;
+  (g.log||[]).forEach(l=>{
+    if(l.gold!==undefined) return;
+    run = Math.max(0, run + l.pts);
+    pts.push(run);
+    labels.push(`${l.pts>0?'+':''}${l.pts} — ${l.reason}${l.member?' ('+l.member+')':''}`);
+  });
+  if(pts[pts.length-1] !== g.points){ pts.push(g.points); labels.push('Total actuel'); }
+  if(pts.length < 3) return '<div class="chart-empty">Pas encore assez d\'actions pour tracer un graphique.</div>';
+  const W=300, H=130, pl=34, pr=10, pt=12, pb=20;
+  const max = Math.max(...pts, 10);
+  const x = i => pl + (i/(pts.length-1))*(W-pl-pr);
+  const y = v => pt + (1 - v/max)*(H-pt-pb);
+  const line = pts.map((v,i)=>`${x(i).toFixed(1)},${y(v).toFixed(1)}`).join(' ');
+  const area = `${x(0).toFixed(1)},${y(0).toFixed(1)} ${line} ${x(pts.length-1).toFixed(1)},${y(0).toFixed(1)}`;
+  const dots = pts.map((v,i)=>`<circle cx="${x(i).toFixed(1)}" cy="${y(v).toFixed(1)}" r="2.8" fill="#d4af2f" stroke="#0a0a08" stroke-width="1"><title>${esc(labels[i])} → ${v} pts</title></circle>`).join('');
+  return `<svg viewBox="0 0 ${W} ${H}" class="chart-svg" role="img" aria-label="Évolution des points de ${esc(g.name)}">
+    <defs><linearGradient id="grad_${g.id}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#d4af2f" stop-opacity=".45"/><stop offset="1" stop-color="#d4af2f" stop-opacity="0"/></linearGradient></defs>
+    <line x1="${pl}" y1="${y(0)}" x2="${W-pr}" y2="${y(0)}" stroke="#2e2e22"/>
+    <line x1="${pl}" y1="${y(max)}" x2="${W-pr}" y2="${y(max)}" stroke="#2e2e22" stroke-dasharray="3 3"/>
+    <text x="${pl-4}" y="${y(max)+3}" text-anchor="end" font-size="8" fill="#9a9788">${max}</text>
+    <text x="${pl-4}" y="${y(0)+3}" text-anchor="end" font-size="8" fill="#9a9788">0</text>
+    <polygon points="${area}" fill="url(#grad_${g.id})"/>
+    <polyline points="${line}" fill="none" stroke="#d4af2f" stroke-width="1.8" stroke-linejoin="round"/>
+    ${dots}
+    <text x="${pl}" y="${H-5}" font-size="8" fill="#9a9788">Départ</text>
+    <text x="${W-pr}" y="${H-5}" text-anchor="end" font-size="8" fill="#9a9788">Actuel</text>
+  </svg>`;
+}
+
+function updateHeroStats(){
+  const hg=document.getElementById('heroGuilds');
+  const hm=document.getElementById('heroMembers');
+  if(hg) hg.textContent=DATA.guilds.length;
+  if(hm) hm.textContent=DATA.guilds.reduce((n,g)=>n+(g.members||[]).length,0);
+}
+
+function render(){
+  updateHeroStats();
+  const list = document.getElementById('list');
+  if(!DATA.guilds.length){
+    list.innerHTML = '<div class="empty">Aucune guilde pour l\'instant.<br>Crée la première avec le bouton ci-dessus.</div>';
+    return;
+  }
+  const sorted = [...DATA.guilds].sort((a,b)=>b.points-a.points);
+  list.innerHTML = sorted.map((g,i)=>{
+    const t = tierFor(g.points);
+    const medal = i===0?'🥇':i===1?'🥈':i===2?'🥉':'';
+    const isOpen = openId===g.id;
+    return `<div class="guild" style="--tier-color:${t.color}">
+      <div class="guild-top" onclick="toggle('${g.id}')">
+        <span class="medal">${medal}</span>
+        <span class="gname">${esc(g.name)}</span>
+        <span class="badge" style="--tier-color:${t.color}">${t.name}</span>
+        <span class="pts">${g.points} pts</span>
+        <span class="pts" style="color:var(--gold);min-width:auto;">🪙 ${g.gold||0}</span>
+      </div>
+      <div class="members-count">${g.members.length}/10 membres</div>
+      <div class="detail ${isOpen?'open':''}">
+        ${g.members.map((m,idx)=>`<div class="member-row"><span>${esc(m.name)} <span class="role">— ${esc(m.role)} · ${m.points||0} pts</span></span>${canManage()?`<button onclick="removeMember('${g.id}',${idx})">✕</button>`:''}</div>`).join('') || '<div class="member-row"><span class="role">Aucun membre</span></div>'}
+        <div class="chart-title">📈 Évolution des points</div>
+        ${guildChart(g)}
+        <div class="log">${(g.log||[]).slice().reverse().map(l=> l.gold!==undefined
+          ? `<div>🪙 ${l.gold>0?'+':''}${l.gold} or — ${esc(l.reason)}</div>`
+          : `<div>${l.pts>0?'+':''}${l.pts} pts — ${esc(l.reason)}${l.member?` <b>(${esc(l.member)})</b>`:''}</div>`
+        ).join('') || '<div>Aucune mission enregistrée</div>'}</div>
+        ${(canManage()||canAddMembers()) ? `<div class="actions">
+          ${canManage() ? `<button class="primary" onclick="openAddPoints('${g.id}')">⚡ Ajouter des points</button>` : ''}
+          ${canManage() ? `<button onclick="openAddGold('${g.id}')">🪙 Or</button>` : ''}
+          ${canAddMembers() ? `<button onclick="addMember('${g.id}')">+ Membre</button>` : ''}
+          ${canAddMembers() ? `<button onclick="openShop('${g.id}')">🛒 Boutique</button>` : ''}
+          ${canManage() ? `<button onclick="clearGuildLog('${g.id}')">🗑 Vider le journal</button>` : ''}
+          ${canManage() ? `<button class="danger" onclick="deleteGuild('${g.id}')">Supprimer la guilde</button>` : ''}
+        </div>` : ''}
+      </div>
+    </div>`;
+  }).join('');
+}
+function esc(s){ if(s===undefined||s===null) return ''; return String(s).replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function toggle(id){ openId = openId===id ? null : id; render(); }
+
+async function persist(){
+  render();
+  document.getElementById('app-data').textContent = JSON.stringify(DATA);
+  if(!sb){
+    openInfo("⚠️ Supabase non configuré", "Ta modification s'affiche ici mais n'est pas sauvegardée ni partagée. Renseigne SUPABASE_URL et SUPABASE_ANON_KEY en haut du script (voir supabase-setup.sql).");
+    return;
+  }
+  try{
+    suppressEcho = true;
+    const { error } = await sb.from('app_state').update({ data: DATA, updated_at: new Date().toISOString() }).eq('id','main');
+    if(error) throw error;
+  }catch(e){
+    openInfo("⚠️ Sauvegarde impossible", "Ta modification s'affiche ici mais n'a pas pu être enregistrée sur Supabase : " + (e.message||e) + ". Vérifie ta connexion et les policies de la table app_state.");
+  } finally {
+    setTimeout(()=>{ suppressEcho = false; }, 700);
+  }
+}
+
+// ---------- modale maison ----------
+const overlay = document.getElementById('overlay');
+const modalBox = document.getElementById('modalBox');
+function closeModal(){ overlay.classList.remove('open'); modalBox.innerHTML=''; }
+overlay.addEventListener('click', e=>{ if(e.target===overlay) closeModal(); });
+
+function openForm(title, fields, onSubmit, submitLabel){
+  modalBox.innerHTML = `<h3>${esc(title)}</h3>` +
+    fields.map(f=>`<label>${esc(f.label)}</label>` + (f.type==='select'
+      ? `<select id="f_${f.id}">${f.options.map(o=>`<option ${o===f.value?'selected':''}>${esc(o)}</option>`).join('')}</select>`
+      : `<input id="f_${f.id}" type="${f.type||'text'}" value="${esc(f.value||'')}">`)
+    ).join('') +
+    `<div class="modal-actions"><button onclick="closeModal()">Annuler</button><button class="primary" id="modalOk">${esc(submitLabel||'Valider')}</button></div>`;
+  overlay.classList.add('open');
+  const first = modalBox.querySelector('input,select');
+  if(first) setTimeout(()=>first.focus(),50);
+  document.getElementById('modalOk').onclick = ()=>{
+    const values = {};
+    fields.forEach(f=> values[f.id] = document.getElementById('f_'+f.id).value);
+    closeModal();
+    onSubmit(values);
+  };
+}
+function openConfirm(title, text, onYes){
+  modalBox.innerHTML = `<h3>${esc(title)}</h3><p>${esc(text)}</p>
+    <div class="modal-actions"><button onclick="closeModal()">Annuler</button><button class="danger" id="modalYes">Confirmer</button></div>`;
+  overlay.classList.add('open');
+  document.getElementById('modalYes').onclick = ()=>{ closeModal(); onYes(); };
+}
+function openInfo(title, html){
+  modalBox.innerHTML = `<h3>${esc(title)}</h3><div style="font-size:.9em;">${html}</div>
+    <div class="modal-actions"><button class="primary" onclick="closeModal()">Fermer</button></div>`;
+  overlay.classList.add('open');
+}
+
+// ---------- actions ----------
+function createGuild(){
+  if(!canManage()) return;
+  openForm("Nouvelle guilde", [{id:'name', label:'Nom de la guilde'}], (v)=>{
+    if(!v.name) return;
+    DATA.guilds.push({id:'g'+Date.now(), name:v.name, points:0, members:[], log:[]});
+    persist();
+  }, "Créer");
+}
+function clearGuildLog(id){
+  if(!canManage()) return;
+  const g = DATA.guilds.find(g=>g.id===id);
+  openConfirm("Vider le journal", `Effacer tout l'historique d'actions de "${g.name}" ? Les points et l'or actuels ne sont pas modifiés, mais le graphique repartira de zéro.`, ()=>{
+    g.log = [];
+    persist();
+  });
+}
+function deleteGuild(id){
+  if(!canManage()) return;
+  openConfirm("Supprimer la guilde", "Cette action est définitive. Confirmer ?", ()=>{
+    DATA.guilds = DATA.guilds.filter(g=>g.id!==id);
+    openId=null;
+    persist();
+  });
+}
+function addMember(id){
+  if(!canAddMembers()) return;
+  const g = DATA.guilds.find(g=>g.id===id);
+  if(g.members.length>=10){ openInfo("Guilde complète","Cette guilde a déjà 10 membres (maximum)."); return; }
+  openForm("Ajouter un membre", [
+    {id:'name', label:'Nom du joueur'},
+    {id:'role', label:'Rôle', type:'select', options:['Membre','Officier','Chef de guilde'], value:'Membre'}
+  ], (v)=>{
+    if(!v.name) return;
+    g.members.push({name:v.name, role:v.role, points:0});
+    persist();
+  }, "Ajouter");
+}
+function removeMember(id, idx){
+  if(!canManage()) return;
+  const g = DATA.guilds.find(g=>g.id===id);
+  openConfirm("Retirer le membre", `Retirer ${g.members[idx].name} de la guilde ?`, ()=>{
+    g.members.splice(idx,1);
+    persist();
+  });
+}
+function applyPoints(id, pts, reason, memberName){
+  const g = DATA.guilds.find(g=>g.id===id);
+  g.points = Math.max(0, g.points + pts);
+  g.log = g.log || [];
+  g.log.push({pts, reason, member: memberName || null});
+  if(memberName){
+    const m = g.members.find(m=>m.name===memberName);
+    if(m) m.points = Math.max(0, (m.points||0) + pts);
+  }
+  persist();
+}
+function openAddPoints(id){
+  if(!canManage()) return;
+  const g = DATA.guilds.find(g=>g.id===id);
+  const memberOptions = `<option value="">— Toute la guilde (aucun membre en particulier) —</option>` +
+    g.members.map(m=>`<option value="${esc(m.name)}">${esc(m.name)} (${esc(m.role)})</option>`).join('');
+  modalBox.innerHTML = `<h3>⚡ Ajouter des points</h3><p>${esc(g.name)} — choisis une action du barème ou saisis un montant libre.</p>
+    <label>Attribuer à</label><select id="pointMember">${memberOptions}</select>
+    <div class="divider">barème</div>
+    <div id="quickList"></div>
+    <div class="divider">ou montant personnalisé</div>
+    <label>Points (négatif = pénalité)</label><input id="customPts" type="number" value="10">
+    <label>Raison</label><input id="customReason" type="text" value="Mission">
+    <div class="modal-actions"><button onclick="closeModal()">Annuler</button><button class="primary" id="customOk">Valider le montant libre</button></div>`;
+  const ql = document.getElementById('quickList');
+  ql.innerHTML = DATA.pointRules.map((r,idx)=>{
+    const label = r.perRank ? `${r.label} (+${r.perRank}/rang)` : `${r.label} (${r.pts>0?'+':''}${r.pts})`;
+    const color = r.perRank ? 'var(--gold)' : (r.pts>0 ? '#6fd67a' : '#ff8484');
+    return `<button type="button" class="quick-btn" data-idx="${idx}"><span>${esc(r.label)}</span><b style="color:${color}">${r.perRank? '+'+r.perRank+'/rang' : (r.pts>0?'+':'')+r.pts}</b></button>`;
+  }).join('');
+  ql.querySelectorAll('.quick-btn').forEach(btn=>{
+    btn.onclick = ()=>{
+      const r = DATA.pointRules[+btn.dataset.idx];
+      const member = document.getElementById('pointMember').value;
+      if(r.perRank){
+        closeModal();
+        openForm("Prime — rang concerné", [{id:'rang', label:'Rang de la prime (nombre)', type:'number', value:1}], (v)=>{
+          const rang = parseInt(v.rang,10) || 1;
+          applyPoints(id, r.perRank*rang, `${r.label} (rang ${rang})`, member);
+        }, "Valider");
+      } else {
+        closeModal();
+        applyPoints(id, r.pts, r.label, member);
+      }
+    };
+  });
+  document.getElementById('customOk').onclick = ()=>{
+    const pts = parseInt(document.getElementById('customPts').value,10);
+    const reason = document.getElementById('customReason').value || 'Mission';
+    const member = document.getElementById('pointMember').value;
+    if(isNaN(pts)) return;
+    closeModal();
+    applyPoints(id, pts, reason, member);
+  };
+  overlay.classList.add('open');
+}
+function openAddGold(id){
+  if(!canManage()) return;
+  const g = DATA.guilds.find(g=>g.id===id);
+  openForm("🪙 Ajouter / retirer de l'or", [
+    {id:'amount', label:"Quantité d'or (négatif pour retirer)", type:'number', value:50},
+    {id:'reason', label:'Raison (optionnel)', value:'Récompense'}
+  ], (v)=>{
+    const amt = parseInt(v.amount,10);
+    if(isNaN(amt)) return;
+    g.gold = Math.max(0,(g.gold||0)+amt);
+    g.log = g.log || [];
+    g.log.push({gold:amt, reason: v.reason || 'Or'});
+    persist();
+  }, "Valider");
+}
+function openShop(id, tab){
+  if(!canAddMembers()) return;
+  tab = tab || 'pts';
+  const isGold = tab === 'or';
+  const g = DATA.guilds.find(g=>g.id===id);
+  const items = isGold ? DATA.goldShopItems : DATA.shopItems;
+  const balance = isGold ? (g.gold||0) : g.points;
+  const unit = isGold ? '🪙' : 'pts';
+  const fmt = c => isGold ? `🪙 ${c}` : `${c} pts`;
+  modalBox.innerHTML = `<h3>🛒 Boutique</h3>
+    <p>${esc(g.name)} — <b style="color:var(--gold)">${g.points} pts</b> · <b style="color:var(--gold)">🪙 ${g.gold||0}</b></p>
+    <div style="display:flex;gap:8px;margin-bottom:12px;">
+      <button id="tabPts" class="${!isGold?'primary':''}">Boutique points</button>
+      <button id="tabOr" class="${isGold?'primary':''}">🪙 Boutique or</button>
+    </div>
+    <div id="shopList"></div>
+    ${canManage() ? `<button class="primary" id="shopAdd" style="margin-top:6px;">+ Ajouter un article</button>` : ''}
+    <div class="modal-actions"><button onclick="closeModal()">Fermer</button></div>`;
+  document.getElementById('tabPts').onclick = ()=>openShop(id,'pts');
+  document.getElementById('tabOr').onclick = ()=>openShop(id,'or');
+  const sl = document.getElementById('shopList');
+  sl.innerHTML = items.length ? items.map((it,idx)=>{
+    const afford = balance >= it.cost;
+    return `<div style="display:flex;gap:6px;align-items:stretch;margin-bottom:8px;">
+      <button type="button" class="quick-btn buy" data-idx="${idx}" style="margin-bottom:0;${afford?'':'opacity:.45;'}"><span>${esc(it.label)}</span><b style="color:var(--gold)">${fmt(it.cost)}</b></button>
+      ${canManage() ? `<button type="button" class="edit-item" data-idx="${idx}" style="padding:6px 10px;">✎</button><button type="button" class="del-item" data-idx="${idx}" style="padding:6px 10px;">✕</button>` : ''}
+    </div>`;
+  }).join('') : `<p>Aucun article dans cette boutique pour le moment.${canManage()?' Ajoutes-en avec le bouton ci-dessous.':''}</p>`;
+  sl.querySelectorAll('.buy').forEach(btn=>{
+    btn.onclick = ()=>{
+      const it = items[+btn.dataset.idx];
+      if(balance < it.cost){ openInfo(isGold?"Or insuffisant":"Points insuffisants", `Il manque ${it.cost - balance} ${isGold?"pièces d'or":"points"} pour acheter "${it.label}".`); return; }
+      openConfirm("Confirmer l'achat", `Acheter "${it.label}" pour ${it.cost} ${isGold?"pièces d'or":"points"} ?`, ()=>{
+        g.log = g.log || [];
+        if(isGold){
+          g.gold = (g.gold||0) - it.cost;
+          g.log.push({gold:-it.cost, reason:`🛒 ${it.label}`});
+        } else {
+          g.points -= it.cost;
+          g.log.push({pts:-it.cost, reason:`🛒 ${it.label}`});
+        }
+        DATA.purchases = DATA.purchases || [];
+        DATA.purchases.push({guild:g.name, item:it.label, cost:it.cost, currency:isGold?'or':'pts', date:new Date().toLocaleDateString('fr-FR')});
+        persist();
+      });
+    };
+  });
+  if(canManage()){
+    document.getElementById('shopAdd').onclick = ()=>{
+      openForm(isGold?"Nouvel article (boutique or)":"Nouvel article (boutique points)", [
+        {id:'label', label:"Nom de l'article"},
+        {id:'cost', label:`Prix (${isGold?"pièces d'or":"points"})`, type:'number', value:100}
+      ], (v)=>{
+        if(!v.label) return;
+        items.push({label:v.label, cost:Math.max(0, parseInt(v.cost,10)||0)});
+        persist();
+        openShop(id, tab);
+      }, "Ajouter");
+    };
+    sl.querySelectorAll('.edit-item').forEach(btn=>{
+      btn.onclick = ()=>{
+        const it = items[+btn.dataset.idx];
+        openForm("Modifier l'article", [
+          {id:'label', label:"Nom de l'article", value:it.label},
+          {id:'cost', label:`Prix (${isGold?"pièces d'or":"points"})`, type:'number', value:it.cost}
+        ], (v)=>{
+          if(!v.label) return;
+          it.label = v.label;
+          it.cost = Math.max(0, parseInt(v.cost,10)||0);
+          persist();
+          openShop(id, tab);
+        }, "Enregistrer");
+      };
+    });
+    sl.querySelectorAll('.del-item').forEach(btn=>{
+      btn.onclick = ()=>{
+        const idx = +btn.dataset.idx;
+        openConfirm("Supprimer l'article", `Retirer "${items[idx].label}" de la boutique ?`, ()=>{
+          items.splice(idx,1);
+          persist();
+          openShop(id, tab);
+        });
+      };
+    });
+  }
+  overlay.classList.add('open');
+}
+function showPurchaseHistory(){
+  if(!canManage()) return;
+  const purchases = DATA.purchases || [];
+  modalBox.innerHTML = `<h3>🧾 Historique des achats</h3>
+    <div>${purchases.length ? purchases.slice().reverse().map(p=>
+      `<div style="padding:6px 0;border-bottom:1px dashed var(--line);">
+         <b>${esc(p.guild)}</b> — ${esc(p.item)} <span style="color:var(--gold);">(${p.currency==='or' ? '🪙 '+p.cost+' or' : p.cost+' pts'})</span>
+         <div style="color:var(--sub);font-size:.8em;">${esc(p.date)}</div>
+       </div>`).join('') : '<p>Aucun achat pour le moment.</p>'}</div>
+    ${purchases.length ? `<div class="modal-actions" style="justify-content:flex-start;margin-top:14px;">
+      <button class="danger" id="clearHistBtn">🗑 Vider l'historique</button>
+    </div>` : ''}
+    <div class="modal-actions"><button class="primary" onclick="closeModal()">Fermer</button></div>`;
+  if(purchases.length){
+    document.getElementById('clearHistBtn').onclick = ()=>{
+      openConfirm("Vider l'historique", "Supprimer définitivement tout l'historique des achats ? Cette action ne touche pas aux points ni à l'or déjà dépensés.", ()=>{
+        DATA.purchases = [];
+        persist();
+        showPurchaseHistory();
+      });
+    };
+  }
+  overlay.classList.add('open');
+}
+function showMemberRanking(){
+  const all = [];
+  DATA.guilds.forEach(g=> g.members.forEach(m=> all.push({name:m.name, role:m.role, guild:g.name, points:m.points||0})));
+  all.sort((a,b)=>b.points-a.points);
+  const roleColor = r => r==='Chef de guilde' ? 'var(--gold)' : r==='Officier' ? 'var(--diamant)' : 'var(--sub)';
+  openInfo("🏅 Classement des membres", all.length ? all.map((m,i)=>{
+    const medal = i===0?'🥇':i===1?'🥈':i===2?'🥉':`${i+1}.`;
+    return `<div style="display:flex;justify-content:space-between;align-items:center;gap:8px;padding:7px 0;border-bottom:1px dashed var(--line);">
+       <span style="min-width:24px;">${medal}</span>
+       <span style="flex:1;">
+         <b>${esc(m.name)}</b>
+         <span style="display:block;color:${roleColor(m.role)};font-size:.78em;">${esc(m.role)} · ${esc(m.guild)}</span>
+       </span>
+       <b style="color:var(--gold);white-space:nowrap;">${m.points} pts</b>
+     </div>`;
+  }).join('') : '<p>Aucun membre pour le moment.</p>');
+}
+function showRanks(){
+  modalBox.innerHTML = `<h3>🏆 Rangs des guildes</h3>
+    <div id="ranksList"></div>
+    ${canManage() ? `<div class="modal-actions" style="justify-content:flex-start;margin-top:14px;">
+      <button class="primary" id="rankAddBtn">+ Ajouter un rang</button>
+    </div>` : ''}
+    <div class="modal-actions"><button class="primary" onclick="closeModal()">Fermer</button></div>`;
+  renderRanksList();
+  if(canManage()){
+    document.getElementById('rankAddBtn').onclick = ()=>{
+      openForm("Nouveau rang", [
+        {id:'name', label:'Nom du rang'},
+        {id:'min', label:'Points requis', type:'number', value:0},
+        {id:'color', label:'Couleur', type:'color', value:'#d4af2f'}
+      ], (v)=>{
+        if(!v.name) return;
+        DATA.tiers.push({name:v.name, min:parseInt(v.min,10)||0, color:v.color||'#d4af2f'});
+        persist();
+        showRanks();
+      }, "Ajouter");
+    };
+  }
+  overlay.classList.add('open');
+}
+function renderRanksList(){
+  const rl = document.getElementById('ranksList');
+  const sorted = [...DATA.tiers].sort((a,b)=>b.min-a.min);
+  rl.innerHTML = sorted.map(t=>{
+    const realIdx = DATA.tiers.indexOf(t);
+    return `<div style="display:flex;justify-content:space-between;align-items:center;gap:8px;padding:5px 0;border-bottom:1px dashed var(--line);">
+       <span style="color:${t.color};font-weight:700;">${esc(t.name)}</span>
+       <span style="display:flex;align-items:center;gap:8px;">
+         <span>dès ${t.min} pts</span>
+         ${canManage() ? `<button data-idx="${realIdx}" class="rank-edit" style="padding:3px 9px;font-size:.8em;">✎</button><button data-idx="${realIdx}" class="rank-del" style="padding:3px 9px;font-size:.8em;">✕</button>` : ''}
+       </span>
+     </div>`;
+  }).join('');
+  if(canManage()){
+    rl.querySelectorAll('.rank-edit').forEach(btn=>{
+      btn.onclick = ()=>{
+        const t = DATA.tiers[+btn.dataset.idx];
+        openForm("Modifier le rang", [
+          {id:'name', label:'Nom du rang', value:t.name},
+          {id:'min', label:'Points requis', type:'number', value:t.min},
+          {id:'color', label:'Couleur', type:'color', value:t.color}
+        ], (v)=>{
+          if(!v.name) return;
+          t.name = v.name; t.min = parseInt(v.min,10)||0; t.color = v.color||t.color;
+          persist();
+          showRanks();
+        }, "Enregistrer");
+      };
+    });
+    rl.querySelectorAll('.rank-del').forEach(btn=>{
+      btn.onclick = ()=>{
+        const idx = +btn.dataset.idx;
+        if(DATA.tiers.length<=1){ openInfo("Impossible","Il doit rester au moins un rang."); return; }
+        openConfirm("Supprimer le rang", `Retirer le rang "${DATA.tiers[idx].name}" ?`, ()=>{
+          DATA.tiers.splice(idx,1);
+          persist();
+          showRanks();
+        });
+      };
+    });
+  }
+}
+function showBareme(){
+  modalBox.innerHTML = `<h3>📊 Barème des points</h3>
+    <div id="baremeList"></div>
+    ${canManage() ? `<div class="modal-actions" style="justify-content:flex-start;margin-top:14px;">
+      <button class="primary" id="baremeAddBtn">+ Ajouter une règle</button>
+    </div>` : ''}
+    <div class="modal-actions"><button class="primary" onclick="closeModal()">Fermer</button></div>`;
+  renderBaremeList();
+  if(canManage()){
+    document.getElementById('baremeAddBtn').onclick = ()=>{
+      openForm("Nouvelle règle du barème", [
+        {id:'label', label:'Nom de la règle'},
+        {id:'type', label:'Type', type:'select', options:['Montant fixe','Par rang'], value:'Montant fixe'},
+        {id:'value', label:'Valeur en points (négatif = pénalité)', type:'number', value:10}
+      ], (v)=>{
+        if(!v.label) return;
+        const value = parseInt(v.value,10) || 0;
+        if(v.type === 'Par rang'){
+          DATA.pointRules.push({label:v.label, pts:null, perRank:value});
+        } else {
+          DATA.pointRules.push({label:v.label, pts:value});
+        }
+        persist();
+        showBareme();
+      }, "Ajouter");
+    };
+  }
+  overlay.classList.add('open');
+}
+function renderBaremeList(){
+  const bl = document.getElementById('baremeList');
+  bl.innerHTML = DATA.pointRules.map((r,idx)=>{
+    const val = r.perRank ? `+${r.perRank} / rang` : `${r.pts>0?'+':''}${r.pts}`;
+    const color = r.perRank ? 'var(--gold)' : (r.pts>0 ? '#6fd67a' : '#ff8484');
+    return `<div style="display:flex;justify-content:space-between;align-items:center;gap:10px;padding:6px 0;border-bottom:1px dashed var(--line);">
+       <span>${esc(r.label)}</span>
+       <span style="display:flex;align-items:center;gap:8px;">
+         <b style="color:${color};white-space:nowrap;">${val}</b>
+         ${canManage() ? `<button data-idx="${idx}" class="bareme-del" style="padding:3px 9px;font-size:.8em;">✕</button>` : ''}
+       </span>
+     </div>`;
+  }).join('');
+  if(canManage()){
+    bl.querySelectorAll('.bareme-del').forEach(btn=>{
+      btn.onclick = ()=>{
+        const idx = +btn.dataset.idx;
+        openConfirm("Supprimer la règle", `Retirer "${DATA.pointRules[idx].label}" du barème ?`, ()=>{
+          DATA.pointRules.splice(idx,1);
+          persist();
+          showBareme();
+        });
+      };
+    });
+  }
+}
+
+updateRoleButtons();
+render();
+</script>
+
+
+</body><!-- v2 --></html>
