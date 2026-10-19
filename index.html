@@ -454,6 +454,7 @@ footer{
 <div class="wrap">
   <div class="toolbar">
     <button class="primary" id="btnNewGuild" onclick="createGuild()">📜 Fonder une guilde</button>
+    <button id="btnMaxMembers" onclick="openSetMaxMembers()">👥 Limite de membres</button>
     <button class="danger" id="btnResetPoints" onclick="resetAllPoints()">🔄 Réinitialiser les points</button>
   </div>
   <div id="list"></div>
@@ -509,6 +510,7 @@ DATA.pointRules = DATA.pointRules || DEFAULT_POINT_RULES.slice();
 DATA.tiers = DATA.tiers || DEFAULT_TIERS.map(t=>({...t}));
 DATA.shopItems = DATA.shopItems || DEFAULT_SHOP_ITEMS.map(i=>({...i}));
 DATA.goldShopItems = DATA.goldShopItems || [];
+if(DATA.maxMembers === undefined || DATA.maxMembers === null) DATA.maxMembers = 0;
 let openId = null;
 const ROLES = {
   mj:   { password:"BroXBoubou", key:"kumo_mj_v2",   label:"Mode MJ" },
@@ -518,6 +520,11 @@ let roles = {
   mj:   localStorage.getItem(ROLES.mj.key) === '1',
   chef: localStorage.getItem(ROLES.chef.key) === '1'
 };
+function maxMembers(){ return parseInt(DATA.maxMembers,10) || 0; } // 0 = aucune limite
+function membersLabel(g){
+  const n = (g.members||[]).length, max = maxMembers();
+  return max ? `${n}/${max} membres` : `${n} membre${n>1?'s':''}`;
+}
 function canManage(){ return roles.mj; }
 function canAddMembers(){ return roles.mj || roles.chef; }
 
@@ -544,6 +551,7 @@ function mergeIncomingData(incoming){
   DATA.tiers = DATA.tiers || DEFAULT_TIERS.map(t=>({...t}));
   DATA.shopItems = DATA.shopItems || DEFAULT_SHOP_ITEMS.map(i=>({...i}));
   DATA.goldShopItems = DATA.goldShopItems || [];
+if(DATA.maxMembers === undefined || DATA.maxMembers === null) DATA.maxMembers = 0;
 }
 
 async function loadFromSupabase(){
@@ -573,6 +581,7 @@ function updateRoleButtons(){
   document.getElementById('btnChef').textContent = roles.chef ? '🔓 Quitter le mode Chef' : '🔑 Mode Chef de Guilde';
   document.getElementById('btnNewGuild').style.display = canManage() ? '' : 'none';
   document.getElementById('btnResetPoints').style.display = canManage() ? '' : 'none';
+  document.getElementById('btnMaxMembers').style.display = canManage() ? '' : 'none';
   document.getElementById('btnHistory').style.display = canManage() ? '' : 'none';
 }
 function toggleRole(roleName){
@@ -658,7 +667,7 @@ function render(){
         <span class="pts">${g.points} pts</span>
         <span class="pts" style="color:var(--gold-text);min-width:auto;">🪙 ${g.gold||0}</span>
       </div>
-      <div class="members-count">${g.members.length}/10 membres</div>
+      <div class="members-count">${membersLabel(g)}</div>
       <div class="detail ${isOpen?'open':''}">
         ${g.members.map((m,idx)=>`<div class="member-row"><span>${esc(m.name)} <span class="role">— ${esc(m.role)} · ${m.points||0} pts</span></span>${canManage()?`<button onclick="removeMember('${g.id}',${idx})">✕</button>`:''}</div>`).join('') || '<div class="member-row"><span class="role">Aucun membre</span></div>'}
         <div class="chart-title">📈 Évolution des points</div>
@@ -840,6 +849,18 @@ function clearGuildLog(id){
     persist();
   });
 }
+function openSetMaxMembers(){
+  if(!canManage()) return;
+  const biggest = DATA.guilds.reduce((m,g)=>Math.max(m,(g.members||[]).length),0);
+  openForm("👥 Limite de membres par guilde", [
+    {id:'max', label:`Nombre maximum de membres, 0 = aucune limite (actuellement ${maxMembers()||'aucune limite'}${biggest?`, la plus grande guilde en a ${biggest}`:''})`, type:'number', value:maxMembers()}
+  ], (v)=>{
+    const n = parseInt(v.max,10);
+    if(isNaN(n) || n < 0){ openInfo("Valeur invalide","Indique un nombre (0 pour aucune limite)."); return; }
+    DATA.maxMembers = n;
+    persist();
+  }, "Enregistrer");
+}
 function resetAllPoints(){
   if(!canManage()) return;
   if(!DATA.guilds.length){ openInfo("Aucune guilde", "Il n'y a aucune guilde à réinitialiser."); return; }
@@ -866,7 +887,7 @@ function deleteGuild(id){
 function addMember(id){
   if(!canAddMembers()) return;
   const g = DATA.guilds.find(g=>g.id===id);
-  if(g.members.length>=10){ openInfo("Guilde complète","Cette guilde a déjà 10 membres (maximum)."); return; }
+  if(maxMembers() && g.members.length>=maxMembers()){ openInfo("Guilde complète",`Cette guilde a déjà ${maxMembers()} membres (maximum).`); return; }
   openForm("Ajouter un membre", [
     {id:'name', label:'Nom du joueur'},
     {id:'role', label:'Rôle', type:'select', options:['Membre','Officier','Chef de guilde'], value:'Membre'}
